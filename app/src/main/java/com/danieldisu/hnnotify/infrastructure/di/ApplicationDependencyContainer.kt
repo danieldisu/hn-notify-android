@@ -9,7 +9,9 @@ import com.danieldisu.hnnotify.data.stories.impl.StoryService
 import com.danieldisu.hnnotify.data.top.TopStoriesRepository
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesRepositoryImpl
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesService
-import com.danieldisu.hnnotify.domain.fetch.FetchNewStoriesUseCase
+import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
+import com.danieldisu.hnnotify.domain.scan.InterestsRegexBuilder
+import com.danieldisu.hnnotify.domain.scan.ScanInterestingStoriesUseCase
 import com.danieldisu.hnnotify.infrastructure.network.OkHttpClientBuilder
 import com.danieldisu.hnnotify.infrastructure.network.RetrofitHNServiceBuilder
 import com.danieldisu.hnnotify.presentation.stories.StoriesViewModel
@@ -56,7 +58,9 @@ private object Modules {
   }
 
   private val domain = module {
-    factory { FetchNewStoriesUseCase(get(), get()) }
+    factory { FetchTopStoriesUseCase(get(), get()) }
+    factory { ScanInterestingStoriesUseCase(get(), get(), get()) }
+    factory { InterestsRegexBuilder() }
   }
 
   private val presentation = module {

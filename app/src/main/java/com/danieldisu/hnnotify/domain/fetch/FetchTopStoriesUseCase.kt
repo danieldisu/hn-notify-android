@@ -6,7 +6,7 @@ import com.danieldisu.hnnotify.data.top.TopStoriesRepository
 
 private const val MAX_NUMBER_OF_STORIES_TO_FETCH = 10
 
-class FetchNewStoriesUseCase(
+class FetchTopStoriesUseCase(
   private val topStoriesRepository: TopStoriesRepository,
   private val storyRepository: StoryRepository
 ) {

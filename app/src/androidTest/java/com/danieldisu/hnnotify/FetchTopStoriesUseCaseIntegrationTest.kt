@@ -8,7 +8,7 @@ import com.danieldisu.hnnotify.data.stories.impl.StoryService
 import com.danieldisu.hnnotify.data.top.TopStoriesRepository
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesRepositoryImpl
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesService
-import com.danieldisu.hnnotify.domain.fetch.FetchNewStoriesUseCase
+import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
 import com.danieldisu.hnnotify.infrastructure.network.OkHttpClientBuilder
 import com.danieldisu.hnnotify.infrastructure.network.RetrofitHNServiceBuilder
 import kotlinx.coroutines.Dispatchers
@@ -18,7 +18,7 @@ import org.junit.Test
 
 class FetchTopStoriesUseCaseIntegrationTest {
 
-  private val fetchNewStoriesUseCase = FetchNewStoriesUseCase(topStoriesRepository, storyRepository)
+  private val fetchNewStoriesUseCase = FetchTopStoriesUseCase(topStoriesRepository, storyRepository)
 
   @Test
   fun name() {
