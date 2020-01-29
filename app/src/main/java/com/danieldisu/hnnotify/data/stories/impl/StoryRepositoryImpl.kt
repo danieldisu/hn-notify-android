@@ -1,5 +1,6 @@
 package com.danieldisu.hnnotify.data.stories.impl
 
+import android.util.Log
 import com.danieldisu.hnnotify.data.common.StoryId
 import com.danieldisu.hnnotify.data.stories.StoryRepository
 import com.danieldisu.hnnotify.data.stories.entities.Story
@@ -10,15 +11,20 @@ class StoryRepositoryImpl(
 
   private val cache: MutableMap<StoryId, Story> = mutableMapOf()
 
-  override suspend fun getById(storyId: StoryId): Story {
+  override suspend fun getById(storyId: StoryId): Story? {
     val cachedStory = cache[storyId]
 
     if (cachedStory != null) {
       return cachedStory
     }
 
-    return storyService.getById(storyId.storyId)
-      .also { cache[storyId] = it }
+    return try {
+      storyService.getById(storyId.storyId)
+        .also { cache[storyId] = it }
+    } catch (exception: Exception) {
+      Log.e("StoryRepository", null, exception)
+      null
+    }
   }
 
 }

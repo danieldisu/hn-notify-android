@@ -5,6 +5,6 @@ import com.danieldisu.hnnotify.data.stories.entities.Story
 
 interface StoryRepository {
 
-  suspend fun getById(storyId: StoryId): Story
+  suspend fun getById(storyId: StoryId): Story?
 
 }
