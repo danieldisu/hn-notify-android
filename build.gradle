@@ -15,6 +15,14 @@ allprojects {
   repositories {
     google()
     jcenter()
+    maven {
+      name = "GitHubPackages"
+      url = uri("https://maven.pkg.github.com/danieldisu/kollection-view")
+      credentials {
+        username = github_packages_user
+        password = github_packages_token
+      }
+    }
   }
 }
 

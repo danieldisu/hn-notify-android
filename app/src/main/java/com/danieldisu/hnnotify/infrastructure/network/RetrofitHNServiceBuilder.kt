@@ -1,12 +1,14 @@
 package com.danieldisu.hnnotify.infrastructure.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.UnstableDefault
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
 
 private const val BASE_URL = "https://hacker-news.firebaseio.com/v0/"
 private const val contentType = "application/json"
+
 
 class RetrofitHNServiceBuilder(
   okHttpClientBuilder: OkHttpClientBuilder
@@ -23,8 +25,14 @@ class RetrofitHNServiceBuilder(
     return Retrofit.Builder()
       .baseUrl(BASE_URL)
       .client(okHttpClient)
-      .addConverterFactory(Json.asConverterFactory(contentType.toMediaType()))
+      .addConverterFactory(jsonConverter())
       .build()
   }
+
+
+  @UseExperimental(UnstableDefault::class)
+  private fun jsonConverter() = Json {
+    strictMode = false
+  }.asConverterFactory(contentType.toMediaType())
 
 }
