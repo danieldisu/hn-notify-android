@@ -4,7 +4,7 @@ import com.danieldisu.hnnotify.data.stories.StoryRepository
 import com.danieldisu.hnnotify.data.stories.entities.Story
 import com.danieldisu.hnnotify.data.top.TopStoriesRepository
 
-private const val MAX_NUMBER_OF_STORIES_TO_FETCH = 10
+private const val MAX_NUMBER_OF_STORIES_TO_FETCH = 100
 
 class FetchTopStoriesUseCase(
   private val topStoriesRepository: TopStoriesRepository,

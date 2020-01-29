@@ -8,8 +8,17 @@ class StoryRepositoryImpl(
   private val storyService: StoryService
 ) : StoryRepository {
 
+  private val cache: MutableMap<StoryId, Story> = mutableMapOf()
+
   override suspend fun getById(storyId: StoryId): Story {
+    val cachedStory = cache[storyId]
+
+    if (cachedStory != null) {
+      return cachedStory
+    }
+
     return storyService.getById(storyId.storyId)
+      .also { cache[storyId] = it }
   }
 
 }
