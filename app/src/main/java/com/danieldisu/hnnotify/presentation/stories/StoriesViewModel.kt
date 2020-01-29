@@ -21,12 +21,7 @@ class StoriesViewModel(
   private val viewState: BroadcastChannel<StoriesViewState> = ConflatedBroadcastChannel()
 
   init {
-    viewModelScope.launch {
-      val newStories = scanInterestingStoriesUseCase()
-        .flatMapTo(mutableSetOf()) { it.value }
-
-      viewState.offer(StoriesViewState.Loaded(newStories))
-    }
+    loadStories()
   }
 
   fun subscribe(storiesUI: StoriesUI) {
@@ -35,6 +30,24 @@ class StoriesViewModel(
         .collect {
           storiesUI.update(it)
         }
+    }
+  }
+
+  fun onFabClicked() {
+    loadStories()
+  }
+
+  private fun loadStories() {
+    viewModelScope.launch {
+      val newStories = scanInterestingStoriesUseCase()
+        .flatMapTo(mutableListOf()) { it.value }
+        .distinct()
+
+      if (newStories.isEmpty()) {
+        viewState.offer(StoriesViewState.Empty)
+      } else {
+        viewState.offer(StoriesViewState.Loaded(newStories))
+      }
     }
   }
 

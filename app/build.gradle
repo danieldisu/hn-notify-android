@@ -31,6 +31,10 @@ android {
     freeCompilerArgs += "-XXLanguage:+InlineClasses"
     freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
   }
+
+  viewBinding {
+    enabled = true
+  }
 }
 
 dependencies {
@@ -45,6 +49,7 @@ dependencies {
   implementation 'androidx.appcompat:appcompat:1.1.0'
   implementation 'com.google.android.material:material:1.0.0'
   implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+  implementation("com.google.android.material:material:1.2.0-alpha04")
 
   implementation("com.danieldisu:kollection-view:0.0.3")
 
