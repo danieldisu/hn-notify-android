@@ -12,6 +12,8 @@ import com.danieldisu.hnnotify.data.top.impl.TopStoriesService
 import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
 import com.danieldisu.hnnotify.domain.scan.InterestsRegexBuilder
 import com.danieldisu.hnnotify.domain.scan.ScanInterestingStoriesUseCase
+import com.danieldisu.hnnotify.infrastructure.db.AppDatabase
+import com.danieldisu.hnnotify.infrastructure.db.DatabaseHolder
 import com.danieldisu.hnnotify.infrastructure.network.OkHttpClientBuilder
 import com.danieldisu.hnnotify.infrastructure.network.RetrofitHNServiceBuilder
 import com.danieldisu.hnnotify.presentation.stories.StoriesViewModel
@@ -53,7 +55,7 @@ private object Modules {
     single<TopStoriesService> { buildRetrofitService() }
 
     factory<InterestsRepository> { InMemoryInterestsRepository() }
-    factory<StoryRepository> { StoryRepositoryImpl(get()) }
+    factory<StoryRepository> { StoryRepositoryImpl(get(), get()) }
     factory<TopStoriesRepository> { TopStoriesRepositoryImpl(get()) }
   }
 
@@ -67,6 +69,11 @@ private object Modules {
     factory { StoriesViewModel(get()) }
   }
 
+  private val infra = module {
+    single { DatabaseHolder.buildDatabase(get()) }
+    single { get<AppDatabase>().storyDBDatasource() }
+  }
+
   private inline fun <reified T> Scope.buildRetrofitService(): T {
     return get<RetrofitHNServiceBuilder>().build(T::class.java)
   }
@@ -74,7 +81,8 @@ private object Modules {
   fun get(): List<Module> = listOf(
     data,
     domain,
-    presentation
+    presentation,
+    infra
   )
 
 }

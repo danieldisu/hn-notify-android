@@ -34,6 +34,7 @@ class StoriesViewModel(
   }
 
   fun onFabClicked() {
+    viewState.offer(StoriesViewState.Empty)
     loadStories()
   }
 
