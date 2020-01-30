@@ -4,7 +4,7 @@ import retrofit2.http.GET
 
 interface TopStoriesService {
 
-  @GET("newstories.json")
+  @GET("topstories.json")
   suspend fun get(): List<String>
 
 }
