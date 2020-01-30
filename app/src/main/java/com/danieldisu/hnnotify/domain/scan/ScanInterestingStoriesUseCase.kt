@@ -4,7 +4,6 @@ import com.danieldisu.hnnotify.data.interests.InterestsRepository
 import com.danieldisu.hnnotify.data.interests.entities.Interest
 import com.danieldisu.hnnotify.data.stories.entities.Story
 import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
-import java.util.*
 
 class ScanInterestingStoriesUseCase(
   private val fetchTopStoriesUseCase: FetchTopStoriesUseCase,
@@ -20,8 +19,10 @@ class ScanInterestingStoriesUseCase(
       val interest = interestToRegex.key
       val regex = interestToRegex.value
 
+      println("testing against $regex")
+
       val storiesThatMatches = topStories.filter { story ->
-        regex.containsMatchIn(story.title.toLowerCase(Locale.getDefault()))
+        regex.search(story.lowerCaseTitle)
       }
 
       interest to storiesThatMatches

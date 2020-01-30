@@ -3,6 +3,7 @@ package com.danieldisu.hnnotify.data.stories.entities
 import com.danieldisu.hnnotify.data.common.StoryId
 import kotlinx.serialization.Serializable
 import java.net.URL
+import java.util.*
 
 @Serializable
 data class Story(
@@ -17,6 +18,7 @@ data class Story(
 ) {
 
   val storyId: StoryId = StoryId(id)
+  val lowerCaseTitle = title.toLowerCase(Locale.ENGLISH)
 
   fun getDomain(): String? {
     if (url == null) return null
