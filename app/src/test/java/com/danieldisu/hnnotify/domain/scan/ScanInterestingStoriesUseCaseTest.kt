@@ -14,7 +14,7 @@ class ScanInterestingStoriesUseCaseTest {
   private val fetchTopStoriesUseCase: FetchTopStoriesUseCase = mockk()
 
   private val scanInterestingStoriesUseCase =
-    ScanInterestingStoriesUseCase(fetchTopStoriesUseCase, InMemoryInterestsRepository(), InterestsRegexBuilder())
+    ScanInterestingStoriesUseCase(fetchTopStoriesUseCase, InMemoryInterestsRepository(), InterestMatcher())
 
   @Test
   fun `should not return true when javascript is in the title`() {

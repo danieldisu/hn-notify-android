@@ -1,12 +1,33 @@
 package com.danieldisu.hnnotify.domain.scan
 
 import com.danieldisu.hnnotify.data.interests.entities.Interest
-import org.junit.Assert.assertEquals
+import com.danieldisu.hnnotify.domain.scan.TestData.interests
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Test
 
-class InterestsRegexBuilderTest {
+class InterestMatcherTest {
 
-  private val interests = listOf(
+  private val interestMatcher = InterestMatcher()
+
+  @Test
+  fun `should return true when a word is present`() {
+    interestMatcher.build(interests)
+
+    assertTrue(interestMatcher.match(" java is ok ish..."))
+  }
+
+  @Test
+  fun `should not return true when a word is part of a longer word in the text`() {
+    interestMatcher.build(interests)
+
+    assertFalse(interestMatcher.match("javascript is the worst language"))
+  }
+
+}
+
+private object TestData {
+  val interests = listOf(
     Interest(
       id = "1",
       insertedAt = System.currentTimeMillis(),
@@ -37,13 +58,4 @@ class InterestsRegexBuilderTest {
     )
   )
 
-  private val interestsRegexBuilder = InterestsRegexBuilder()
-
-  @Test
-  fun `should return a regex for each interest`() {
-    val result = interestsRegexBuilder.build(interests)
-
-    println(result.map { it.value })
-    assertEquals(3, result.size)
-  }
 }

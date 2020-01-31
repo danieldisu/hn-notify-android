@@ -8,25 +8,31 @@ import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
 class ScanInterestingStoriesUseCase(
   private val fetchTopStoriesUseCase: FetchTopStoriesUseCase,
   private val interestsRepository: InterestsRepository,
-  private val interestsRegexBuilder: InterestsRegexBuilder
+  private val interestMatcher: InterestMatcher
 ) {
 
   suspend operator fun invoke(): Map<Interest, List<Story>> {
     val topStories = fetchTopStoriesUseCase()
-    val interestRegexes = interestsRegexBuilder.build(interestsRepository.getInterests())
+    val interests = interestsRepository.getInterests()
+    interestMatcher.build(interests)
 
-    return interestRegexes.map { interestToRegex ->
-      val interest = interestToRegex.key
-      val regex = interestToRegex.value
+    val stories = topStories.filter {
+      interestMatcher.match(it.title)
+    }
 
-      println("testing against $regex")
+    return mapOf(interests[0] to stories)
 
-      val storiesThatMatches = topStories.filter { story ->
-        regex.search(story.lowerCaseTitle)
-      }
 
-      interest to storiesThatMatches
-    }.toMap()
+//    return interestRegexes.map { interestToRegex ->
+//      val interest = interestToRegex.key
+//      val regex = interestToRegex.value
+//
+//      val storiesThatMatches = topStories.filter { story ->
+//        regex.search(story.lowerCaseTitle)
+//      }
+//
+//      interest to storiesThatMatches
+//    }.toMap()
   }
 
 }
