@@ -27,6 +27,10 @@ class ScanInterestingStoriesUseCaseTest {
 
     val result = runBlocking { scanInterestingStoriesUseCase.invoke() }
 
-    assertEquals(2, result.size)
+
+    val interests = result.interestingStoriesByInterest.keys
+    val interestingStories = result.getStories()
+    assertEquals(1, interests.size)
+    assertEquals(2, interestingStories.size)
   }
 }

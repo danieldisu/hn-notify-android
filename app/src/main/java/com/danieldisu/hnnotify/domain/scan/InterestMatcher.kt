@@ -1,29 +1,47 @@
 package com.danieldisu.hnnotify.domain.scan
 
 import com.danieldisu.hnnotify.data.interests.entities.Interest
-import java.util.*
 
 class InterestMatcher {
 
-  private var computedInterests: Map<Interest, Regex> = emptyMap()
+  private var computedRegex: Regex? = null
+  private var interests: List<Interest> = emptyList()
 
   fun build(interests: List<Interest>) {
-    computedInterests = interests
-      .map { it to buildRegexForInterest(it) }
-      .toMap()
+    this.interests = interests
+    this.computedRegex = buildRegexFor(interests.flatMap { it.keywords })
   }
 
   fun match(text: String): Boolean {
-    return computedInterests.any { it.value.containsMatchIn(text) }
+    val regex = computedRegex ?: throw IllegalStateException("computed regex can't be null")
+    return regex.containsMatchIn(text)
   }
 
-  private fun buildRegexForInterest(interest: Interest): Regex {
-    val keywords = interest
-      .keywords
-      .map { it.toLowerCase(Locale.ENGLISH) }
-      .joinToString("|") { "(\\b$it\\b)" }
+  fun matches(text: String): List<Interest> {
+    val regex = computedRegex ?: throw IllegalStateException("computed regex can't be null")
+    val matches = regex.findAll(text)
+    return findInterestsWithTheMatchingString(matches)
+  }
 
-    return "\\b$keywords\\b".toRegex(RegexOption.IGNORE_CASE)
+  private fun findInterestsWithTheMatchingString(matches: Sequence<MatchResult>): List<Interest> {
+    return matches.map { matchResult ->
+      val matchingKeyword = matchResult.value.trim()
+      interests.filter { interest ->
+        interest.containsKeyword(matchingKeyword)
+      }
+    }.flatten().toList()
+  }
+
+  private fun Interest.containsKeyword(matchingKeyword: String): Boolean {
+    return keywords.any { keyword ->
+      keyword.equals(matchingKeyword, true)
+    }
+  }
+
+  private fun buildRegexFor(keywords: List<String>): Regex {
+    val keywordRegex = keywords.joinToString("|") { "(\\b$it\\b)" }
+
+    return "\\b$keywordRegex\\b".toRegex(RegexOption.IGNORE_CASE)
   }
 
 }

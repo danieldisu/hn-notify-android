@@ -41,8 +41,7 @@ class StoriesViewModel(
   private fun loadStories() {
     viewModelScope.launch {
       val newStories = scanInterestingStoriesUseCase()
-        .flatMapTo(mutableListOf()) { it.value }
-        .distinct()
+        .getStories()
 
       if (newStories.isEmpty()) {
         viewState.offer(StoriesViewState.Empty)

@@ -33,14 +33,6 @@ class InMemoryInterestsRepository: InterestsRepository {
       keywords = listOf(
         "android"
       )
-    ),
-    Interest(
-      id = "4",
-      insertedAt = System.currentTimeMillis(),
-      name = "apple",
-      keywords = listOf(
-        "apple"
-      )
     )
   )
 

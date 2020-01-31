@@ -11,28 +11,47 @@ class ScanInterestingStoriesUseCase(
   private val interestMatcher: InterestMatcher
 ) {
 
-  suspend operator fun invoke(): Map<Interest, List<Story>> {
+  suspend operator fun invoke(): ScanInterestingStoriesResult {
     val topStories = fetchTopStoriesUseCase()
     val interests = interestsRepository.getInterests()
+    val interestingStories = InterestingStories()
     interestMatcher.build(interests)
 
-    val stories = topStories.filter {
-      interestMatcher.match(it.title)
+    topStories.forEach {
+      val interest = interestMatcher.matches(it.title)
+      interestingStories.add(it, interest)
     }
 
-    return mapOf(interests[0] to stories)
+    return ScanInterestingStoriesResult(interestingStories.get())
+  }
 
+}
 
-//    return interestRegexes.map { interestToRegex ->
-//      val interest = interestToRegex.key
-//      val regex = interestToRegex.value
-//
-//      val storiesThatMatches = topStories.filter { story ->
-//        regex.search(story.lowerCaseTitle)
-//      }
-//
-//      interest to storiesThatMatches
-//    }.toMap()
+class InterestingStories {
+
+  private val map: MutableMap<Interest, List<Story>> = mutableMapOf()
+
+  fun add(story: Story, toInterests: List<Interest>) {
+    toInterests.forEach { add(story, it) }
+  }
+
+  fun add(story: Story, toInterest: Interest) {
+    val stories = map[toInterest] ?: listOf()
+    map[toInterest] = stories.plus(story)
+  }
+
+  fun get(): Map<Interest, List<Story>> = map
+
+}
+
+data class ScanInterestingStoriesResult(
+  val interestingStoriesByInterest: Map<Interest, List<Story>>
+) {
+
+  fun getStories(): List<Story> {
+    return interestingStoriesByInterest
+      .flatMapTo(mutableListOf()) { it.value }
+      .distinct()
   }
 
 }
