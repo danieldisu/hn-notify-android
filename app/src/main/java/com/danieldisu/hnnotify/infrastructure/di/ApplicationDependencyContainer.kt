@@ -1,6 +1,7 @@
 package com.danieldisu.hnnotify.infrastructure.di
 
 import android.content.Context
+import com.danieldisu.hnnotify.data.interesting.datasource.InterestingStoriesDbDataSource
 import com.danieldisu.hnnotify.data.interests.InterestsRepository
 import com.danieldisu.hnnotify.data.interests.impl.InMemoryInterestsRepository
 import com.danieldisu.hnnotify.data.stories.StoryRepository
@@ -73,6 +74,8 @@ private object Modules {
   private val infra = module {
     single { DatabaseHolder.buildDatabase(get()) }
     single { get<AppDatabase>().storyDBDatasource() }
+    single { get<AppDatabase>().interestingStoriesDao() }
+    single { InterestingStoriesDbDataSource(get()) }
   }
 
   private inline fun <reified T> Scope.buildRetrofitService(): T {

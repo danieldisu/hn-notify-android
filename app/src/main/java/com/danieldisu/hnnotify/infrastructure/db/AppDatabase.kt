@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.danieldisu.hnnotify.data.interesting.datasource.InterestingStoriesDao
 import com.danieldisu.hnnotify.data.stories.datasource.StoryDBDatasource
 import com.danieldisu.hnnotify.data.stories.datasource.StoryDBO
 
@@ -15,6 +16,8 @@ import com.danieldisu.hnnotify.data.stories.datasource.StoryDBO
 abstract class AppDatabase : RoomDatabase() {
 
   abstract fun storyDBDatasource(): StoryDBDatasource
+
+  abstract fun interestingStoriesDao(): InterestingStoriesDao
 
 }
 

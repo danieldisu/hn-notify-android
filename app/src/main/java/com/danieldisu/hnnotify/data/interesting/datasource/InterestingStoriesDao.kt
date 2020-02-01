@@ -5,34 +5,42 @@ import com.danieldisu.hnnotify.data.common.StoryId
 import com.danieldisu.hnnotify.data.interesting.entity.InterestingStory
 import org.threeten.bp.Instant
 
-@Dao
-interface InterestingStoriesDbDataSource : InterestingStoriesDataSource {
+private const val SEPARATOR = "___"
 
+class InterestingStoriesDbDataSource(
+  private val interestingStoriesDao: InterestingStoriesDao
+) : InterestingStoriesDataSource {
   override fun save(interestingStory: InterestingStory) =
-    saveInternal(interestingStory.toDbo())
-
-  @Insert
-  fun saveInternal(interestingStoryDbo: InterestingStoryDbo)
+    interestingStoriesDao.save(interestingStory.toDbo())
 
   override fun getAll(): List<InterestingStory> =
-    getAllInternal().map { it.toDomain() }
-
-  @Query("SELECT * FROM interesting_story")
-  fun getAllInternal(): List<InterestingStoryDbo>
+    interestingStoriesDao.getAll().map { it.toDomain() }
 }
 
-private fun InterestingStory.toDbo(): InterestingStoryDbo =
-  InterestingStoryDbo(
+@Dao
+interface InterestingStoriesDao {
+
+  @Insert
+  fun save(interestingStoryDbo: InterestingStoryDbo)
+
+  @Query("SELECT * FROM interesting_story")
+  fun getAll(): List<InterestingStoryDbo>
+
+}
+
+private fun InterestingStory.toDbo(): InterestingStoryDbo {
+  return InterestingStoryDbo(
     id = InterestingStoryDboIdGenerator.generate(this),
-    insertedAt = this.foundAt.toEpochMilli(),
-    interestingFor = this.interestingFor,
-    storyId = this.storyId.storyId
+    insertedAt = foundAt.toEpochMilli(),
+    interestingFor = interestingFor.joinToString(SEPARATOR),
+    storyId = storyId.storyId
   )
+}
 
 private fun InterestingStoryDbo.toDomain(): InterestingStory {
   return InterestingStory(
     storyId = StoryId(storyId),
-    interestingFor = interestingFor,
+    interestingFor = interestingFor.split(SEPARATOR),
     foundAt = Instant.ofEpochMilli(insertedAt)
   )
 }
@@ -42,6 +50,6 @@ private fun InterestingStoryDbo.toDomain(): InterestingStory {
 data class InterestingStoryDbo(
   @PrimaryKey val id: String,
   val storyId: String,
-  val interestingFor: List<String>,
+  val interestingFor: String,
   val insertedAt: Long
 )
