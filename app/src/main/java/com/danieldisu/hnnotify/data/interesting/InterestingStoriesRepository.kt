@@ -7,8 +7,8 @@ class InterestingStoriesRepository(
   private val dataSource: InterestingStoriesDataSource
 ) {
 
-  fun save(story: InterestingStory) = dataSource.save(story)
+  suspend fun save(story: InterestingStory) = dataSource.save(story)
 
-  fun getAll(): List<InterestingStory> = dataSource.getAll()
+  suspend fun getAll(): List<InterestingStory> = dataSource.getAll()
 
 }

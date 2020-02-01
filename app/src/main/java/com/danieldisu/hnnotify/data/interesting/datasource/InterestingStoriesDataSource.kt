@@ -4,8 +4,8 @@ import com.danieldisu.hnnotify.data.interesting.entity.InterestingStory
 
 interface InterestingStoriesDataSource {
 
-  fun save(interestingStory: InterestingStory)
+  suspend fun save(interestingStory: InterestingStory)
 
-  fun getAll(): List<InterestingStory>
+  suspend fun getAll(): List<InterestingStory>
 
 }

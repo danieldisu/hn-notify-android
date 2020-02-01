@@ -10,10 +10,10 @@ private const val SEPARATOR = "___"
 class InterestingStoriesDbDataSource(
   private val interestingStoriesDao: InterestingStoriesDao
 ) : InterestingStoriesDataSource {
-  override fun save(interestingStory: InterestingStory) =
+  override suspend  fun save(interestingStory: InterestingStory) =
     interestingStoriesDao.save(interestingStory.toDbo())
 
-  override fun getAll(): List<InterestingStory> =
+  override suspend fun getAll(): List<InterestingStory> =
     interestingStoriesDao.getAll().map { it.toDomain() }
 }
 
@@ -21,10 +21,10 @@ class InterestingStoriesDbDataSource(
 interface InterestingStoriesDao {
 
   @Insert
-  fun save(interestingStoryDbo: InterestingStoryDbo)
+  suspend fun save(interestingStoryDbo: InterestingStoryDbo)
 
   @Query("SELECT * FROM interesting_story")
-  fun getAll(): List<InterestingStoryDbo>
+  suspend fun getAll(): List<InterestingStoryDbo>
 
 }
 

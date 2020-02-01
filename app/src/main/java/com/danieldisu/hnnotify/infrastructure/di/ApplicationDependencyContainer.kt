@@ -1,6 +1,8 @@
 package com.danieldisu.hnnotify.infrastructure.di
 
 import android.content.Context
+import com.danieldisu.hnnotify.data.interesting.InterestingStoriesRepository
+import com.danieldisu.hnnotify.data.interesting.datasource.InterestingStoriesDataSource
 import com.danieldisu.hnnotify.data.interesting.datasource.InterestingStoriesDbDataSource
 import com.danieldisu.hnnotify.data.interests.InterestsRepository
 import com.danieldisu.hnnotify.data.interests.impl.InMemoryInterestsRepository
@@ -11,6 +13,7 @@ import com.danieldisu.hnnotify.data.top.TopStoriesRepository
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesRepositoryImpl
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesService
 import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
+import com.danieldisu.hnnotify.domain.interesting.SaveInterestingStoryUseCase
 import com.danieldisu.hnnotify.domain.scan.InterestMatcher
 import com.danieldisu.hnnotify.domain.scan.ScanInterestingStoriesUseCase
 import com.danieldisu.hnnotify.infrastructure.db.AppDatabase
@@ -59,11 +62,13 @@ private object Modules {
     factory<InterestsRepository> { InMemoryInterestsRepository() }
     factory<StoryRepository> { StoryRepositoryImpl(get(), get()) }
     factory<TopStoriesRepository> { TopStoriesRepositoryImpl(get()) }
+    factory { InterestingStoriesRepository(get()) }
   }
 
   private val domain = module {
     factory { FetchTopStoriesUseCase(get(), get()) }
-    factory { ScanInterestingStoriesUseCase(get(), get(), get()) }
+    factory { SaveInterestingStoryUseCase(get()) }
+    factory { ScanInterestingStoriesUseCase(get(), get(), get(), get()) }
     factory { InterestMatcher() }
   }
 
@@ -75,7 +80,7 @@ private object Modules {
     single { DatabaseHolder.buildDatabase(get()) }
     single { get<AppDatabase>().storyDBDatasource() }
     single { get<AppDatabase>().interestingStoriesDao() }
-    single { InterestingStoriesDbDataSource(get()) }
+    single { InterestingStoriesDbDataSource(get()) as InterestingStoriesDataSource }
   }
 
   private inline fun <reified T> Scope.buildRetrofitService(): T {
