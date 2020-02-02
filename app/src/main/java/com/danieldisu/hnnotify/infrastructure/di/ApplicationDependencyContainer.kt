@@ -21,6 +21,7 @@ import com.danieldisu.hnnotify.infrastructure.db.AppDatabase
 import com.danieldisu.hnnotify.infrastructure.db.DatabaseHolder
 import com.danieldisu.hnnotify.infrastructure.network.OkHttpClientBuilder
 import com.danieldisu.hnnotify.infrastructure.network.RetrofitHNServiceBuilder
+import com.danieldisu.hnnotify.presentation.application.TestData
 import com.danieldisu.hnnotify.presentation.stories.StoriesViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
@@ -83,6 +84,7 @@ private object Modules {
     single { get<AppDatabase>().storyDBDatasource() }
     single { get<AppDatabase>().interestingStoriesDao() }
     single { InterestingStoriesDbDataSource(get()) as InterestingStoriesDataSource }
+    factory { TestData(get()) }
   }
 
   private inline fun <reified T> Scope.buildRetrofitService(): T {
