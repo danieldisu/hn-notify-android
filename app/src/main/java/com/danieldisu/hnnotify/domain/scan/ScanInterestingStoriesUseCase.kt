@@ -5,6 +5,7 @@ import com.danieldisu.hnnotify.data.interests.entities.Interest
 import com.danieldisu.hnnotify.data.stories.entities.Story
 import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
 import com.danieldisu.hnnotify.domain.interesting.SaveInterestingStoryUseCase
+import com.danieldisu.hnnotify.infrastructure.logging.LOG
 
 class ScanInterestingStoriesUseCase(
   private val fetchTopStoriesUseCase: FetchTopStoriesUseCase,
@@ -14,6 +15,7 @@ class ScanInterestingStoriesUseCase(
 ) {
 
   suspend operator fun invoke(): ScanInterestingStoriesResult {
+    LOG("ScanInterestingStoriesUseCase::invoke")
     val topStories = fetchTopStoriesUseCase()
     val interests = interestsRepository.getInterests()
     val interestingStories = InterestingStories()
@@ -21,8 +23,11 @@ class ScanInterestingStoriesUseCase(
 
     topStories.forEach { story ->
       val interests = interestMatcher.matches(story.title)
-      interestingStories.add(story, interests)
-      saveInterestingStoryUseCase.save(story, interests)
+      if (interests.isNotEmpty()) {
+        LOG("found story with matching interests")
+        interestingStories.add(story, interests)
+        saveInterestingStoryUseCase.save(story, interests)
+      }
     }
 
     return ScanInterestingStoriesResult(interestingStories.get())

@@ -13,6 +13,7 @@ import com.danieldisu.hnnotify.data.top.TopStoriesRepository
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesRepositoryImpl
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesService
 import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
+import com.danieldisu.hnnotify.domain.interesting.GetInterestingStoriesUseCase
 import com.danieldisu.hnnotify.domain.interesting.SaveInterestingStoryUseCase
 import com.danieldisu.hnnotify.domain.scan.InterestMatcher
 import com.danieldisu.hnnotify.domain.scan.ScanInterestingStoriesUseCase
@@ -67,13 +68,14 @@ private object Modules {
 
   private val domain = module {
     factory { FetchTopStoriesUseCase(get(), get()) }
+    factory { GetInterestingStoriesUseCase(get(), get()) }
     factory { SaveInterestingStoryUseCase(get()) }
     factory { ScanInterestingStoriesUseCase(get(), get(), get(), get()) }
     factory { InterestMatcher() }
   }
 
   private val presentation = module {
-    factory { StoriesViewModel(get()) }
+    factory { StoriesViewModel(get(), get()) }
   }
 
   private val infra = module {

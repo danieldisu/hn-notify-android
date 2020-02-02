@@ -11,7 +11,6 @@ import com.danieldisu.hnnotify.databinding.ActivityStoriesBinding
 import com.danieldisu.hnnotify.presentation.stories.state.StoriesViewState
 import com.danieldisu.hnnotify.presentation.stories.views.StoryItemView
 import com.danieldisu.kollectionview.KollectionView
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_stories.*
 import kotlinx.android.synthetic.main.content_stories.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -20,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 @ExperimentalCoroutinesApi
 @FlowPreview
-class StoriesActivity : AppCompatActivity(), StoriesUI {
+class StoriesActivity : AppCompatActivity(), StoriesViewModel.StoriesUI {
 
   private val viewModel: StoriesViewModel by viewModel()
   private lateinit var binding: ActivityStoriesBinding
@@ -37,7 +36,7 @@ class StoriesActivity : AppCompatActivity(), StoriesUI {
     setSupportActionBar(toolbar)
     viewModel.subscribe(this)
 
-    fab.setOnClickListener { view ->
+    fab.setOnClickListener { _ ->
       viewModel.onFabClicked()
     }
 
