@@ -5,23 +5,23 @@ import android.content.Intent
 import android.net.Uri
 import android.view.LayoutInflater
 import android.widget.LinearLayout
-import com.danieldisu.hnnotify.data.stories.entities.Story
 import com.danieldisu.hnnotify.databinding.ItemViewStoryBinding
-import com.danieldisu.kollectionview.internal.KollectionItemView
+import com.danieldisu.hnnotify.presentation.stories.viewdata.StoryRow
 
 
-class StoryItemView(context: Context) : KollectionItemView<Story>, LinearLayout(context) {
+class StoryTitleRowItemView(context: Context) : StoryRowItemView, LinearLayout(context) {
 
   private val binding =
     ItemViewStoryBinding.inflate(LayoutInflater.from(context), this, true)
 
-  override fun bind(viewModel: Story) {
-    binding.titleView.text = viewModel.title
+  override fun bind(viewModel: StoryRow) {
+    val story = (viewModel as StoryRow.StoryTitleRow).story
+    binding.titleView.text = story.title
 
     setOnClickListener {
-      if (viewModel.url != null) {
+      if (story.url != null) {
         val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse(viewModel.url)
+        i.data = Uri.parse(story.url)
         context.startActivity(i)
       }
     }

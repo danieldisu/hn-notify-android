@@ -19,9 +19,11 @@ import com.danieldisu.hnnotify.domain.scan.InterestMatcher
 import com.danieldisu.hnnotify.domain.scan.ScanInterestingStoriesUseCase
 import com.danieldisu.hnnotify.infrastructure.db.AppDatabase
 import com.danieldisu.hnnotify.infrastructure.db.DatabaseHolder
+import com.danieldisu.hnnotify.infrastructure.localization.StringResourceRepository
 import com.danieldisu.hnnotify.infrastructure.network.OkHttpClientBuilder
 import com.danieldisu.hnnotify.infrastructure.network.RetrofitHNServiceBuilder
 import com.danieldisu.hnnotify.presentation.application.TestData
+import com.danieldisu.hnnotify.presentation.stories.StoriesRowMapper
 import com.danieldisu.hnnotify.presentation.stories.StoriesViewModel
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidFileProperties
@@ -76,7 +78,8 @@ private object Modules {
   }
 
   private val presentation = module {
-    factory { StoriesViewModel(get(), get()) }
+    factory { StoriesViewModel(get(), get(), get()) }
+    factory { StoriesRowMapper(get()) }
   }
 
   private val infra = module {
@@ -85,6 +88,7 @@ private object Modules {
     single { get<AppDatabase>().interestingStoriesDao() }
     single { InterestingStoriesDbDataSource(get()) as InterestingStoriesDataSource }
     factory { TestData(get()) }
+    single { StringResourceRepository(get()) }
   }
 
   private inline fun <reified T> Scope.buildRetrofitService(): T {

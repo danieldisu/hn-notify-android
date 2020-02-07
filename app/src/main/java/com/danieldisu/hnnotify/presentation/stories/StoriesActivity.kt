@@ -6,10 +6,12 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isGone
 import com.danieldisu.hnnotify.R
-import com.danieldisu.hnnotify.data.stories.entities.Story
 import com.danieldisu.hnnotify.databinding.ActivityStoriesBinding
 import com.danieldisu.hnnotify.presentation.stories.state.StoriesViewState
-import com.danieldisu.hnnotify.presentation.stories.views.StoryItemView
+import com.danieldisu.hnnotify.presentation.stories.viewdata.StoryRow
+import com.danieldisu.hnnotify.presentation.stories.views.CategoryTitleItemView
+import com.danieldisu.hnnotify.presentation.stories.views.StoryRowItemView
+import com.danieldisu.hnnotify.presentation.stories.views.StoryTitleRowItemView
 import com.danieldisu.kollectionview.KollectionView
 import kotlinx.android.synthetic.main.activity_stories.*
 import kotlinx.android.synthetic.main.content_stories.*
@@ -17,16 +19,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 class StoriesActivity : AppCompatActivity(), StoriesViewModel.StoriesUI {
 
   private val viewModel: StoriesViewModel by viewModel()
   private lateinit var binding: ActivityStoriesBinding
 
-  private val storiesView: KollectionView<Story, StoryItemView> by lazy {
+  private val story: KollectionView<StoryRow, StoryRowItemView> by lazy {
     @Suppress("UNCHECKED_CAST")
-    binding.content.storiesView as KollectionView<Story, StoryItemView>
+    binding.content.storiesView as KollectionView<StoryRow, StoryRowItemView>
   }
 
   override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,8 +40,17 @@ class StoriesActivity : AppCompatActivity(), StoriesViewModel.StoriesUI {
       viewModel.onFabClicked()
     }
 
-    storiesView.configure(
-      viewFactory = { StoryItemView(this) }
+    story.configure(
+      viewFactory = {
+        if (it == StoryRow.CategoryTitle::class.java.hashCode()) {
+          CategoryTitleItemView(this)
+        } else {
+          StoryTitleRowItemView(this)
+        }
+      },
+      viewTypeFactory = {
+        it::class.hashCode()
+      }
     )
   }
 
@@ -65,13 +74,14 @@ class StoriesActivity : AppCompatActivity(), StoriesViewModel.StoriesUI {
   }
 
   private fun showEmptyState() {
-    storiesView.isGone = true
+    story.isGone = true
     emptyStoriesView.isGone = false
   }
 
   private fun showLoadedState(viewState: StoriesViewState.Loaded) {
-    storiesView.isGone = false
+    story.isGone = false
     emptyStoriesView.isGone = true
-    storiesView.update(viewState.stories)
+    story.update(viewState.rows)
   }
+  
 }
