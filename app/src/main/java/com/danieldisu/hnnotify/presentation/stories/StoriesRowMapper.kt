@@ -36,8 +36,11 @@ class StoriesRowMapper(
   private fun toHumanReadableDate(it: Map.Entry<LocalDate, List<Story>>): String {
     val storyDate = it.key
     val today = LocalDate.now()
+    val yesterday = LocalDate.now().minusDays(1)
     return if (storyDate == today) {
       stringResourceRepository.get(R.string.label_today)
+    } else if (storyDate == yesterday) {
+      stringResourceRepository.get(R.string.label_yesterday)
     } else {
       storyDate.toString()
     }
