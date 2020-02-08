@@ -6,12 +6,16 @@ import com.danieldisu.hnnotify.data.interesting.datasource.InterestingStoriesDat
 import com.danieldisu.hnnotify.data.interesting.datasource.InterestingStoriesDbDataSource
 import com.danieldisu.hnnotify.data.interests.InterestsRepository
 import com.danieldisu.hnnotify.data.interests.impl.InMemoryInterestsRepository
+import com.danieldisu.hnnotify.data.new.NewStoriesRepository
+import com.danieldisu.hnnotify.data.new.impl.NewStoriesRepositoryImpl
+import com.danieldisu.hnnotify.data.new.impl.NewStoriesService
 import com.danieldisu.hnnotify.data.stories.StoryRepository
 import com.danieldisu.hnnotify.data.stories.impl.StoryRepositoryImpl
 import com.danieldisu.hnnotify.data.stories.impl.StoryService
 import com.danieldisu.hnnotify.data.top.TopStoriesRepository
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesRepositoryImpl
 import com.danieldisu.hnnotify.data.top.impl.TopStoriesService
+import com.danieldisu.hnnotify.domain.fetch.FetchNewStoriesUseCase
 import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
 import com.danieldisu.hnnotify.domain.interesting.GetInterestingStoriesUseCase
 import com.danieldisu.hnnotify.domain.interesting.SaveInterestingStoryUseCase
@@ -62,18 +66,21 @@ private object Modules {
     single { RetrofitHNServiceBuilder(get()) }
     single<StoryService> { buildRetrofitService() }
     single<TopStoriesService> { buildRetrofitService() }
+    single<NewStoriesService> { buildRetrofitService() }
 
     factory<InterestsRepository> { InMemoryInterestsRepository() }
     factory<StoryRepository> { StoryRepositoryImpl(get(), get()) }
     factory<TopStoriesRepository> { TopStoriesRepositoryImpl(get()) }
+    factory<NewStoriesRepository> { NewStoriesRepositoryImpl(get()) }
     factory { InterestingStoriesRepository(get()) }
   }
 
   private val domain = module {
     factory { FetchTopStoriesUseCase(get(), get()) }
+    factory { FetchNewStoriesUseCase(get(), get()) }
     factory { GetInterestingStoriesUseCase(get(), get()) }
     factory { SaveInterestingStoryUseCase(get()) }
-    factory { ScanInterestingStoriesUseCase(get(), get(), get(), get()) }
+    factory { ScanInterestingStoriesUseCase(get(), get(), get(), get(), get()) }
     factory { InterestMatcher() }
   }
 
