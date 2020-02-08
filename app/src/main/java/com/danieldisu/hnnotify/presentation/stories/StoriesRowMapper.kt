@@ -23,11 +23,10 @@ class StoriesRowMapper(
 
   private fun groupStoriesByDate(stories: List<InterestingStoryWithStoryData>): Map<String, List<Story>> {
     return stories
-      .asSequence()
       .groupBy { it.interestingStory.foundAtDay }
+      .toSortedMap(compareByDescending { it })
       .mapValues(this::mapToStory)
       .mapKeys(this::toHumanReadableDate)
-      .toMap()
   }
 
   private fun mapToStory(entry: Map.Entry<LocalDate, List<InterestingStoryWithStoryData>>) =
