@@ -22,5 +22,6 @@ data class StoryDBO(
   val title: String,
   val type: String,
   val url: String?,
-  val text: String?
+  val text: String?,
+  val kids: String
 )

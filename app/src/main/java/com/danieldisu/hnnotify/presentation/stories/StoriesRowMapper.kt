@@ -28,6 +28,12 @@ class StoriesRowMapper(
       .mapValues(this::mapToStory)
       .addTodayEntryIfNotPresentAlready()
       .mapKeys(this::toHumanReadableDate)
+      .mapValues(this::sortByUpvoteCount)
+  }
+
+  private fun sortByUpvoteCount(mapEntry: Map.Entry<String, List<Story>>): List<Story> {
+    val originalStories = mapEntry.value
+    return originalStories.sortedByDescending { it.score }
   }
 
   private fun Map<LocalDate, List<Story>>.addTodayEntryIfNotPresentAlready(): Map<LocalDate, List<Story>> {

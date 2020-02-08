@@ -17,6 +17,8 @@ class StoryTitleRowItemView(context: Context) : StoryRowItemView, LinearLayout(c
   override fun bind(viewModel: StoryRow) {
     val story = (viewModel as StoryRow.StoryTitleRow).story
     binding.titleView.text = story.title
+    binding.upvoteCountView.text = story.score.toString()
+    binding.commentCountView.text = story.commentCount().toString()
 
     setOnClickListener {
       if (story.url != null) {

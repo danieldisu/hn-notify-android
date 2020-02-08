@@ -2,6 +2,8 @@ package com.danieldisu.hnnotify.data.stories.datasource
 
 import com.danieldisu.hnnotify.data.stories.entities.Story
 
+private const val KID_DELIMITER = ";"
+
 fun StoryDBO.toStory(): Story =
   Story(
     id = this.id,
@@ -11,7 +13,8 @@ fun StoryDBO.toStory(): Story =
     time = this.time,
     title = this.title,
     type = this.type,
-    url = this.url
+    url = this.url,
+    kids = this.kids.split(KID_DELIMITER)
   )
 
 fun Story.toDBO(): StoryDBO =
@@ -23,5 +26,6 @@ fun Story.toDBO(): StoryDBO =
     time = this.time,
     title = this.title,
     type = this.type,
-    url = this.url
+    url = this.url,
+    kids = this.kids.joinToString(KID_DELIMITER)
   )
