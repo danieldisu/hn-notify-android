@@ -5,7 +5,7 @@ import com.danieldisu.hnnotify.data.interests.entities.Interest
 import com.danieldisu.hnnotify.data.stories.entities.Story
 import com.danieldisu.hnnotify.domain.fetch.FetchTopStoriesUseCase
 import com.danieldisu.hnnotify.domain.interesting.SaveInterestingStoryUseCase
-import com.danieldisu.hnnotify.infrastructure.logging.LOG
+import com.danieldisu.hnnotify.infrastructure.logging.TRACE
 
 class ScanInterestingStoriesUseCase(
   private val fetchTopStoriesUseCase: FetchTopStoriesUseCase,
@@ -15,7 +15,7 @@ class ScanInterestingStoriesUseCase(
 ) {
 
   suspend operator fun invoke(): ScanInterestingStoriesResult {
-    LOG("ScanInterestingStoriesUseCase::invoke")
+    TRACE("ScanInterestingStoriesUseCase::invoke")
     val topStories = fetchTopStoriesUseCase()
     val interests = interestsRepository.getInterests()
     val interestingStories = InterestingStories()
@@ -24,10 +24,16 @@ class ScanInterestingStoriesUseCase(
     topStories.forEach { story ->
       val interests = interestMatcher.matches(story.title)
       if (interests.isNotEmpty()) {
-        LOG("found story with matching interests")
+        TRACE("Found story with matching interests")
         interestingStories.add(story, interests)
         saveInterestingStoryUseCase.save(story, interests)
       }
+    }
+
+    if (interestingStories.isEmpty()) {
+      TRACE("Found no matching stories for your interests")
+      TRACE("Scanned stories ${topStories.size}")
+      TRACE("Added interests ${interests.size}")
     }
 
     return ScanInterestingStoriesResult(interestingStories.get())
@@ -50,6 +56,7 @@ class InterestingStories {
 
   fun get(): Map<Interest, List<Story>> = map
 
+  fun isEmpty(): Boolean = map.isEmpty()
 }
 
 data class ScanInterestingStoriesResult(

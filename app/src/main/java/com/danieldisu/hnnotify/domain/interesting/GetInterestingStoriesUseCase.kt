@@ -4,9 +4,9 @@ import com.danieldisu.hnnotify.data.interesting.InterestingStoriesRepository
 import com.danieldisu.hnnotify.data.interesting.entity.InterestingStory
 import com.danieldisu.hnnotify.data.stories.StoryRepository
 import com.danieldisu.hnnotify.data.stories.entities.Story
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import com.danieldisu.hnnotify.infrastructure.logging.LOG
+import com.danieldisu.hnnotify.infrastructure.logging.TRACE
+import kotlinx.coroutines.flow.*
 
 class GetInterestingStoriesUseCase(
   private val interestingStoriesRepository: InterestingStoriesRepository,
@@ -14,27 +14,29 @@ class GetInterestingStoriesUseCase(
 ) {
 
   fun get(): Flow<List<InterestingStoryWithStoryData>> {
+    TRACE("GetInterestingStoriesUseCase::get")
     return interestingStoriesRepository
       .getAll()
-      .map(getDetails())
+      .map { getDetails(it) }
+      .distinctUntilChanged()
+      .onEach { TRACE("GetInterestingStoriesUseCase::onEach ${it.size}") }
+      .onStart {
+        LOG("Starting listening for interesting stories")
+        TRACE("GetInterestingStoriesUseCase::onStart")
+      }
   }
 
-  private fun getDetails(): suspend (List<InterestingStory>) -> List<InterestingStoryWithStoryData> =
-    { list: List<InterestingStory> ->
-      list
-        .map { interestingStory ->
-          storyRepository.getById(interestingStory.storyId)
-            .let { story ->
-              if (story != null) {
-                InterestingStoryWithStoryData(interestingStory, story)
-              } else {
-                null
-              }
-            }
-        }
-        .filterNotNull()
-        .distinctBy { it.interestingStory.storyId }
-    }
+  private suspend fun getDetails(interestingStories: List<InterestingStory>): List<InterestingStoryWithStoryData> {
+    return interestingStories
+      .mapNotNull { interestingStory -> getDetails(interestingStory) }
+      .distinctBy { it.interestingStory.storyId }
+  }
+
+  private suspend fun getDetails(interestingStory: InterestingStory): InterestingStoryWithStoryData? {
+    return storyRepository.getById(interestingStory.storyId)
+      ?.let { InterestingStoryWithStoryData(interestingStory, it) }
+  }
+
 }
 
 data class InterestingStoryWithStoryData(

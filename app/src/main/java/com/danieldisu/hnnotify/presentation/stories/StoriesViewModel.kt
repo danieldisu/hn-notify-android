@@ -21,7 +21,8 @@ class StoriesViewModel(
   private val viewState: BroadcastChannel<StoriesViewState> = ConflatedBroadcastChannel()
 
   init {
-    loadStories()
+    listenForInterestingStories()
+    scanForNewStories()
   }
 
   fun subscribe(storiesUI: StoriesUI) = viewModelScope.launch {
@@ -31,7 +32,7 @@ class StoriesViewModel(
       }
   }
 
-  private fun loadStories() = viewModelScope.launch {
+  private fun listenForInterestingStories() = viewModelScope.launch {
     getInterestingStoriesUseCase
       .get()
       .map { StoriesViewState.Loaded(storiesRowMapper.map(it)) }
@@ -39,10 +40,13 @@ class StoriesViewModel(
   }
 
   fun onFabClicked() {
+    scanForNewStories()
+  }
+
+  private fun scanForNewStories() {
     viewModelScope.launch {
       scanInterestingStoriesUseCase().getStories()
     }
-
   }
 
   interface StoriesUI {

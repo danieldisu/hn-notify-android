@@ -3,7 +3,6 @@ package com.danieldisu.hnnotify.data.interesting.datasource
 import androidx.room.*
 import com.danieldisu.hnnotify.data.common.StoryId
 import com.danieldisu.hnnotify.data.interesting.entity.InterestingStory
-import com.danieldisu.hnnotify.infrastructure.logging.LOG
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import org.threeten.bp.Instant
@@ -34,7 +33,6 @@ interface InterestingStoriesDao {
 }
 
 private fun InterestingStory.toDbo(): InterestingStoryDbo {
-  LOG("toDbo $storyId")
   return InterestingStoryDbo(
     id = InterestingStoryDboIdGenerator.generate(this),
     insertedAt = foundAt.toEpochMilli(),
