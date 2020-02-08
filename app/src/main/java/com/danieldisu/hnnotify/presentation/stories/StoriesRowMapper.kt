@@ -26,7 +26,19 @@ class StoriesRowMapper(
       .groupBy { it.interestingStory.foundAtDay }
       .toSortedMap(compareByDescending { it })
       .mapValues(this::mapToStory)
+      .addTodayEntryIfNotPresentAlready()
       .mapKeys(this::toHumanReadableDate)
+  }
+
+  private fun Map<LocalDate, List<Story>>.addTodayEntryIfNotPresentAlready(): Map<LocalDate, List<Story>> {
+    val today = LocalDate.now()
+    val todayAlreadyPresent = any { it.key == today }
+    if (todayAlreadyPresent) {
+      return this
+    } else {
+      return this
+        .plus(today to emptyList())
+    }
   }
 
   private fun mapToStory(entry: Map.Entry<LocalDate, List<InterestingStoryWithStoryData>>) =
