@@ -9,8 +9,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 
-private const val MAX_NUMBER_OF_STORIES_TO_FETCH = 400
-
 class FetchTopStoriesUseCase(
   private val topStoriesRepository: TopStoriesRepository,
   private val storyRepository: StoryRepository
@@ -21,7 +19,6 @@ class FetchTopStoriesUseCase(
     TRACE("FetchTopStoriesUseCase::init")
 
     val topStoriesIds = topStoriesRepository.get()
-      .take(MAX_NUMBER_OF_STORIES_TO_FETCH)
 
     TRACE("FetchTopStoriesUseCase::fetched ${topStoriesIds.size} topstories")
 
