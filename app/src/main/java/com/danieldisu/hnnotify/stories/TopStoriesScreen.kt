@@ -7,7 +7,7 @@ import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -16,15 +16,27 @@ import com.danieldisu.hnnotify.data.entities.Story
 
 @Composable
 fun TopStoriesScreen(
-    screenStateHolder: State<TopStoriesScreenState>,
+    topStoriesViewModel: TopStoriesViewModel
+) {
+    val screenState = topStoriesViewModel.stateFlow.collectAsState()
+
+    TopStoriesScaffold(
+        state = screenState.value,
+        onStoryClick = topStoriesViewModel::onStoryClick
+    )
+}
+
+
+@Composable
+fun TopStoriesScaffold(
+    state: TopStoriesScreenState,
     onStoryClick: () -> Unit
-) =
-    when (val state = screenStateHolder.value) {
-        is TopStoriesScreenState.Loaded -> TopStoriesLoaded(stories = state.stories, onStoryClick)
-        is TopStoriesScreenState.Error -> TODO()
-        TopStoriesScreenState.Loading -> TopStoriesLoading()
-        TopStoriesScreenState.Initial -> Surface {}
-    }
+) = when (state) {
+    is TopStoriesScreenState.Loaded -> TopStoriesLoaded(stories = state.stories, onStoryClick)
+    is TopStoriesScreenState.Error -> TODO()
+    TopStoriesScreenState.Loading -> TopStoriesLoading()
+    TopStoriesScreenState.Initial -> Surface {}
+}
 
 @Composable
 fun TopStoriesLoading() {
