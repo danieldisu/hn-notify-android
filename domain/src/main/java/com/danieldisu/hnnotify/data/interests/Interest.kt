@@ -1,9 +1,9 @@
 package com.danieldisu.hnnotify.data.interests
 
-sealed class Interest
+sealed class Interest(open val id: String)
 
 data class KeywordInterest(
-    val id: String,
+    override val id: String,
     val name: String,
     val keywords: List<String>,
-)
+) : Interest(id)
