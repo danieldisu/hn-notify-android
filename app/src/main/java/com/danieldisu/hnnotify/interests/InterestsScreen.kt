@@ -4,6 +4,6 @@ import androidx.compose.foundation.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun InterestsScreen() {
+fun InterestsScreen(interestsViewModel: InterestsViewModel) {
     Text(text = "Interests screen")
 }

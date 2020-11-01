@@ -10,6 +10,7 @@ import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.vectorResource
 import com.danieldisu.hnnotify.R
 import com.danieldisu.hnnotify.interests.InterestsScreen
+import com.danieldisu.hnnotify.interests.InterestsViewModel
 import com.danieldisu.hnnotify.stories.TopStoriesScreen
 import com.danieldisu.hnnotify.stories.TopStoriesViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -18,6 +19,7 @@ class MainActivity : AppCompatActivity() {
 
     private val topStoriesViewModel: TopStoriesViewModel by viewModel()
     private val mainViewModel: MainViewModel by viewModel()
+    private val interestsViewModel: InterestsViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,19 +33,19 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     when (state.value.selectedTab) {
                         Tab.TopStories -> TopStoriesScreen(topStoriesViewModel)
-                        Tab.Interests -> InterestsScreen()
+                        Tab.Interests -> InterestsScreen(interestsViewModel)
                     }
                 }
             }
         }
     }
 
-    private fun actionButton(selectedTab: Tab): @Composable() () -> Unit = {
+    private fun actionButton(selectedTab: Tab): @Composable () -> Unit = {
         when (selectedTab) {
             Tab.TopStories -> {
             }
             Tab.Interests -> FloatingActionButton(
-                onClick = {},
+                onClick = interestsViewModel::onActionButtonClick,
                 icon = {
                     Icon(
                         asset = vectorResource(id = R.drawable.ic_add)
@@ -53,7 +55,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun bottomBar(): @Composable() () -> Unit = {
+    private fun bottomBar(): @Composable () -> Unit = {
         BottomAppBar {
             IconButton(
                 modifier = Modifier.weight(1f),
