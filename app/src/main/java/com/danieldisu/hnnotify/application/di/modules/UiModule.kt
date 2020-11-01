@@ -10,7 +10,7 @@ object UiModule {
     operator fun invoke() = module {
         factory { TopStoriesViewModel(get()) }
         factory { MainViewModel() }
-        factory { InterestsViewModel() }
+        factory { InterestsViewModel(get()) }
     }
 
 }

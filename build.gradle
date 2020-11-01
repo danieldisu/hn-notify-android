@@ -27,6 +27,7 @@ allprojects {
       freeCompilerArgs += '-Xallow-jvm-ir-dependencies'
       freeCompilerArgs += "-XXLanguage:+InlineClasses"
       freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+      freeCompilerArgs += "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi"
       freeCompilerArgs += "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi"
       freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
       freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
