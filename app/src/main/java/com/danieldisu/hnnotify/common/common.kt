@@ -25,7 +25,7 @@ fun LoadingView() =
 
 @Composable
 fun ErrorView(error: Throwable) {
-    Text(text = "error ${error.printStackTrace()}")
+    Text(text = "error $error")
 }
 
 @Composable

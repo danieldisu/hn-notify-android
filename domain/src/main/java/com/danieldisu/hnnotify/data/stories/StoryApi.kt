@@ -1,12 +1,16 @@
 package com.danieldisu.hnnotify.data.stories
 
+import com.danieldisu.hnnotify.data.core.ApiErrorDto
 import com.danieldisu.hnnotify.data.entities.GetInterestingTopStoriesResponse
+import com.slack.eithernet.ApiResult
 import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface StoryApi {
 
     @GET("user/{userId}/stories")
-    suspend fun getInterestingTopStories(@Path("userId") userId: String): GetInterestingTopStoriesResponse
+    suspend fun getInterestingTopStories(
+        @Path("userId") userId: String
+    ): ApiResult<GetInterestingTopStoriesResponse, ApiErrorDto>
 
 }

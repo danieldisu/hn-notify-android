@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.ui.tooling.preview.Preview
+import com.danieldisu.hnnotify.common.ErrorView
 import com.danieldisu.hnnotify.data.entities.Story
 
 @Composable
@@ -33,7 +34,7 @@ fun TopStoriesScaffold(
     onStoryClick: () -> Unit
 ) = when (state) {
     is TopStoriesScreenState.Loaded -> TopStoriesLoaded(stories = state.stories, onStoryClick)
-    is TopStoriesScreenState.Error -> TODO()
+    is TopStoriesScreenState.Error -> ErrorView(state.error)
     TopStoriesScreenState.Loading -> TopStoriesLoading()
     TopStoriesScreenState.Initial -> Surface {}
 }
