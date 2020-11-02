@@ -4,8 +4,8 @@ import androidx.compose.foundation.Text
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Surface
-import androidx.compose.material.TextField
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,21 +32,35 @@ private fun DialogContent(onConfirmButtonClick: (InterestDialogState) -> Unit, o
         elevation = 2.dp,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Column {
-            Row {
-                DialogBody(textState) { textState = it }
-            }
-            Row(modifier = Modifier.align(Alignment.End).padding(10.dp)) {
-                Button(onCancelButtonClick) { Text("Cancel") }
+        Column(modifier = Modifier.padding(16.dp)) {
+            Row { DialogBody(textState) { textState = it } }
+            Spacer(modifier = Modifier.height(16.dp))
+            Row(modifier = Modifier.align(Alignment.End)) {
+                CancelButton(onCancelButtonClick)
                 Spacer(modifier = Modifier.width(10.dp))
-                Button(
-                    onClick = { onConfirmButtonClick(InterestDialogState(name = textState.text, emptyList())) }
-                ) {
-                    Text("Create")
-                }
+                CreateButton(onConfirmButtonClick, textState)
             }
         }
     }
+}
+
+@Composable
+private fun CreateButton(
+    onConfirmButtonClick: (InterestDialogState) -> Unit,
+    textState: TextFieldValue
+) {
+    Button(
+        onClick = { onConfirmButtonClick(InterestDialogState(name = textState.text, emptyList())) },
+        content = { Text("Create") }
+    )
+}
+
+@Composable
+private fun CancelButton(onCancelButtonClick: () -> Unit) {
+    Button(
+        onClick = onCancelButtonClick,
+        content = { Text("Cancel") }
+    )
 }
 
 data class InterestDialogState(
@@ -55,30 +69,16 @@ data class InterestDialogState(
 )
 
 @Composable
-fun confirmButton(): @Composable () -> Unit = {
-    Text("Confirm")
-}
-
-@Composable
-fun dismissButton(): @Composable () -> Unit = {
-    Text("Confirm")
-}
-
-
-@Composable
 private fun DialogBody(textState: TextFieldValue, onValueChange: (TextFieldValue) -> Unit) {
-    Column(
-        modifier = Modifier.padding(16.dp)
-    ) {
+    Column {
         Row { Text(text = "Add an interest", style = MaterialTheme.typography.h6) }
         Spacer(modifier = Modifier.height(16.dp))
-        Row {
-            Text(text = "Interest Name")
-            TextField(value = textState, onValueChange = onValueChange)
-        }
+        Row { OutlinedTextField(value = textState, label = label(), onValueChange = onValueChange) }
     }
 
 }
+
+private fun label(): @Composable () -> Unit = { Text("Interest Name") }
 
 
 @Preview(showBackground = true)
