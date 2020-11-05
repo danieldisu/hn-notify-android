@@ -1,5 +1,6 @@
 package com.danieldisu.hnnotify.application.di.modules
 
+import com.danieldisu.hnnotify.interests.AddInterestViewModel
 import com.danieldisu.hnnotify.interests.InterestsViewModel
 import com.danieldisu.hnnotify.main.MainViewModel
 import com.danieldisu.hnnotify.stories.TopStoriesViewModel
@@ -11,6 +12,7 @@ object UiModule {
         factory { TopStoriesViewModel(get()) }
         factory { MainViewModel() }
         factory { InterestsViewModel(get()) }
+        factory { AddInterestViewModel(get()) }
     }
 
 }

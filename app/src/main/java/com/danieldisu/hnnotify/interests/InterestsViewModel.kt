@@ -23,7 +23,7 @@ class InterestsViewModel(
     }
 
     fun onActionButtonClick() {
-        stateFlow.update(isShowingAddInterestDialog = true)
+        stateFlow.update(addingInterest = true)
     }
 
     fun onInterestClicked() {
@@ -31,20 +31,20 @@ class InterestsViewModel(
     }
 
     fun onAddInterestDialogDismiss() {
-        stateFlow.update(isShowingAddInterestDialog = false)
+        stateFlow.update(addingInterest = false)
     }
 
     fun onConfirmInterestDialog(interestDialogState: InterestDialogState) {
-        stateFlow.update(isShowingAddInterestDialog = false)
+        stateFlow.update(addingInterest = false)
         println(interestDialogState)
     }
 }
 
 private fun MutableStateFlow<InterestsScreenState>.update(
-    isShowingAddInterestDialog: Boolean?
+    addingInterest: Boolean?
 ) {
     value = value.copy(
-        isShowingAddInterestDialog = isShowingAddInterestDialog ?: value.isShowingAddInterestDialog
+        isShowingAddInterestDialog = addingInterest ?: value.isShowingAddInterestDialog
     )
 }
 

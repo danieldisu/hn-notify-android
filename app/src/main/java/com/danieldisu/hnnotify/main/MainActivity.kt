@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.setContent
 import androidx.compose.ui.res.vectorResource
 import com.danieldisu.hnnotify.R
+import com.danieldisu.hnnotify.interests.AddInterestViewModel
 import com.danieldisu.hnnotify.interests.InterestsScreen
 import com.danieldisu.hnnotify.interests.InterestsViewModel
 import com.danieldisu.hnnotify.stories.TopStoriesScreen
@@ -20,6 +21,7 @@ class MainActivity : AppCompatActivity() {
     private val topStoriesViewModel: TopStoriesViewModel by viewModel()
     private val mainViewModel: MainViewModel by viewModel()
     private val interestsViewModel: InterestsViewModel by viewModel()
+    private val addInterestsViewModel: AddInterestViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     when (state.value.selectedTab) {
                         Tab.TopStories -> TopStoriesScreen(topStoriesViewModel)
-                        Tab.Interests -> InterestsScreen(interestsViewModel)
+                        Tab.Interests -> InterestsScreen(interestsViewModel, addInterestsViewModel)
                     }
                 }
             }
@@ -47,9 +49,7 @@ class MainActivity : AppCompatActivity() {
             Tab.Interests -> FloatingActionButton(
                 onClick = interestsViewModel::onActionButtonClick,
                 icon = {
-                    Icon(
-                        asset = vectorResource(id = R.drawable.ic_add)
-                    )
+                    Icon(asset = vectorResource(id = R.drawable.ic_add))
                 }
             )
         }
