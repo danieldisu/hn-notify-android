@@ -51,6 +51,7 @@ private fun MutableStateFlow<InterestsScreenState>.update(
 data class InterestsScreenState(
     val isLoading: Boolean = false,
     val isShowingAddInterestDialog: Boolean = false,
+    val editingInterestAdId: String? = null,
     val error: Throwable? = null,
     val interests: List<Interest> = emptyList()
 ) {

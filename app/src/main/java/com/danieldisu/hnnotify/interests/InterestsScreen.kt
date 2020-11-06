@@ -15,14 +15,18 @@ import com.danieldisu.hnnotify.data.interests.KeywordInterest
 
 
 @Composable
-fun InterestsScreen(interestsViewModel: InterestsViewModel, addInterestsViewModel: AddInterestViewModel) {
-    val screenState = interestsViewModel.stateFlow.collectAsState()
+fun InterestsScreen(
+    interestsViewModel: InterestsViewModel,
+    addInterestsViewModel: (interestId: String?) -> AddInterestViewModel
+) {
+    val screenStateHolder = interestsViewModel.stateFlow.collectAsState()
+    val state = screenStateHolder.value
 
-    if (screenState.value.isShowingAddInterestDialog) {
-        AddInterestScreen(viewModel = addInterestsViewModel)
+    if (state.isShowingAddInterestDialog) {
+        AddInterestScreen(addInterestsViewModel(state.editingInterestAdId))
     } else {
         InterestScaffold(
-            value = screenState.value,
+            value = state,
             onInterestClicked = interestsViewModel::onInterestClicked,
             onAddInterestDialogDismiss = interestsViewModel::onAddInterestDialogDismiss,
             onConfirmInterestDialog = interestsViewModel::onConfirmInterestDialog

@@ -12,7 +12,7 @@ object UiModule {
         factory { TopStoriesViewModel(get()) }
         factory { MainViewModel() }
         factory { InterestsViewModel(get()) }
-        factory { AddInterestViewModel(get()) }
+        factory { (interestId: String?) -> AddInterestViewModel(interestId, get()) }
     }
 
 }

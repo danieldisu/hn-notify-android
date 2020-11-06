@@ -14,13 +14,15 @@ import com.danieldisu.hnnotify.interests.InterestsScreen
 import com.danieldisu.hnnotify.interests.InterestsViewModel
 import com.danieldisu.hnnotify.stories.TopStoriesScreen
 import com.danieldisu.hnnotify.stories.TopStoriesViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 class MainActivity : AppCompatActivity() {
 
     private val topStoriesViewModel: TopStoriesViewModel by viewModel()
     private val mainViewModel: MainViewModel by viewModel()
-    private val interestsViewModel: InterestsViewModel by viewModel()
+    private val interestsViewModel: InterestsViewModel by viewModel { parametersOf("id") }
     private val addInterestsViewModel: AddInterestViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     when (state.value.selectedTab) {
                         Tab.TopStories -> TopStoriesScreen(topStoriesViewModel)
-                        Tab.Interests -> InterestsScreen(interestsViewModel, addInterestsViewModel)
+                        Tab.Interests -> InterestsScreen(interestsViewModel, ::viewModelFactory)
                     }
                 }
             }
@@ -76,4 +78,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun viewModelFactory(interestId: String?) =
+        getViewModel(AddInterestViewModel::class, null) { parametersOf(interestId) }
 }

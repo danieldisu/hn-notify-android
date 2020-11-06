@@ -5,6 +5,7 @@ import com.danieldisu.hnnotify.data.interests.InterestRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class AddInterestViewModel(
+    private val interestId: String?,
     private val interestRepository: InterestRepository
 ) : ViewModel() {
 
