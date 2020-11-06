@@ -17,11 +17,20 @@ import com.danieldisu.hnnotify.R
 fun AddInterestScreen(viewModel: AddInterestViewModel) {
     val state = viewModel.stateFlow.collectAsState()
 
+    val addInterestDialog =
+        AddInterestDialog(
+            title = "Add an interest",
+            onConfirmButtonClick = {},
+            onCancelButtonClick = {}).build()
+
     AddInterestScaffold(
         state = state.value,
         onConfirmButtonClick = viewModel::onConfirmButtonClick,
         onCancelButtonClick = viewModel::onCancelButtonClick,
-        onInterestNameValueChange = viewModel::onInterestNameValueChange
+        onInterestNameValueChange = viewModel::onInterestNameValueChange,
+        onAddKeywordClick = {
+            addInterestDialog.show()
+        }
     )
 }
 
@@ -31,13 +40,14 @@ fun AddInterestScaffold(
     onConfirmButtonClick: () -> Unit,
     onCancelButtonClick: () -> Unit,
     onInterestNameValueChange: (String) -> Unit,
+    onAddKeywordClick: () -> Unit,
 ) {
     Surface(
         elevation = 2.dp,
         modifier = Modifier.fillMaxWidth().fillMaxHeight()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row { AddInterestForm(state.keywords, onInterestNameValueChange) }
+            Row { AddInterestForm(state.keywords, onInterestNameValueChange, onAddKeywordClick) }
             Spacer(modifier = Modifier.height(16.dp))
             ButtonBar(onConfirmButtonClick, onCancelButtonClick)
         }
@@ -45,13 +55,13 @@ fun AddInterestScaffold(
 }
 
 @Composable
-fun AddInterestForm(keywords: List<String>, onValueChange: (String) -> Unit) {
+fun AddInterestForm(keywords: List<String>, onValueChange: (String) -> Unit, onAddKeywordClick: () -> Unit) {
     Column {
         Row { Text(text = "Add an interest", style = MaterialTheme.typography.h6) }
         Spacer(modifier = Modifier.height(16.dp))
         Row { AddInterestTextField(onValueChange) }
         Spacer(modifier = Modifier.height(16.dp))
-        Row { KeywordsField() }
+        Row { KeywordsField(onAddKeywordClick) }
         Spacer(modifier = Modifier.height(16.dp))
         KeywordList(keywords)
     }
@@ -86,7 +96,7 @@ private fun KeywordItemView(keyword: String) {
 }
 
 @Composable
-fun RowScope.KeywordsField() {
+fun RowScope.KeywordsField(onAddKeywordClick: () -> Unit) {
     Row {
         Text(
             text = "Keywords",
@@ -94,7 +104,7 @@ fun RowScope.KeywordsField() {
             modifier = Modifier.align(Alignment.CenterVertically)
         )
         Spacer(modifier = Modifier.weight(1f))
-        OutlinedButton(onClick = {}) {
+        OutlinedButton(onClick = onAddKeywordClick) {
             Text(text = "Add a new keyword")
         }
     }
@@ -150,7 +160,7 @@ fun AddInterestScreenPreview() {
                 "Scala"
             )
         )
-        AddInterestScaffold(state, {}, {}, {})
+        AddInterestScaffold(state, {}, {}, {}, {})
     }
 }
 

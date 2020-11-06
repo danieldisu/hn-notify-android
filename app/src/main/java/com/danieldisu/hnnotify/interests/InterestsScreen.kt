@@ -22,28 +22,22 @@ fun InterestsScreen(
     val screenStateHolder = interestsViewModel.stateFlow.collectAsState()
     val state = screenStateHolder.value
 
-    if (state.isShowingAddInterestDialog) {
-        AddInterestScreen(addInterestsViewModel(state.editingInterestAdId))
-    } else {
-        InterestScaffold(
+    when (state.navState) {
+        InterestsScreenNavState.Interests -> InterestScaffold(
             value = state,
-            onInterestClicked = interestsViewModel::onInterestClicked,
-            onAddInterestDialogDismiss = interestsViewModel::onAddInterestDialogDismiss,
-            onConfirmInterestDialog = interestsViewModel::onConfirmInterestDialog
+            onInterestClicked = interestsViewModel::onInterestClicked
         )
+        InterestsScreenNavState.AddInterest -> AddInterestScreen(addInterestsViewModel(null))
+        is InterestsScreenNavState.EditInterest -> AddInterestScreen(addInterestsViewModel(state.navState.interestId))
     }
 }
 
 @Composable
 fun InterestScaffold(
     value: InterestsScreenState,
-    onInterestClicked: () -> Unit,
-    onAddInterestDialogDismiss: () -> Unit,
-    onConfirmInterestDialog: (InterestDialogState) -> Unit
+    onInterestClicked: () -> Unit
 ) =
     when {
-        value.isShowingAddInterestDialog ->
-            AddInterestDialog(onAddInterestDialogDismiss, onConfirmInterestDialog, onAddInterestDialogDismiss)
         value.isLoading -> LoadingView()
         value.error != null -> ErrorView(value.error)
         else -> InterestsLoaded(value.interests, onInterestClicked)

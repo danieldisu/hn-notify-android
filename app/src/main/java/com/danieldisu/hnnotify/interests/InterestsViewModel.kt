@@ -23,7 +23,7 @@ class InterestsViewModel(
     }
 
     fun onActionButtonClick() {
-        stateFlow.update(addingInterest = true)
+        stateFlow.navigate(InterestsScreenNavState.AddInterest)
     }
 
     fun onInterestClicked() {
@@ -31,27 +31,17 @@ class InterestsViewModel(
     }
 
     fun onAddInterestDialogDismiss() {
-        stateFlow.update(addingInterest = false)
     }
 
-    fun onConfirmInterestDialog(interestDialogState: InterestDialogState) {
-        stateFlow.update(addingInterest = false)
-        println(interestDialogState)
-    }
 }
 
-private fun MutableStateFlow<InterestsScreenState>.update(
-    addingInterest: Boolean?
-) {
-    value = value.copy(
-        isShowingAddInterestDialog = addingInterest ?: value.isShowingAddInterestDialog
-    )
+private fun MutableStateFlow<InterestsScreenState>.navigate(newNavState: InterestsScreenNavState) {
+    this.value = this.value.copy(navState = newNavState)
 }
 
 data class InterestsScreenState(
+    val navState: InterestsScreenNavState = InterestsScreenNavState.Interests,
     val isLoading: Boolean = false,
-    val isShowingAddInterestDialog: Boolean = false,
-    val editingInterestAdId: String? = null,
     val error: Throwable? = null,
     val interests: List<Interest> = emptyList()
 ) {
@@ -60,4 +50,10 @@ data class InterestsScreenState(
             isLoading = true
         )
     }
+}
+
+sealed class InterestsScreenNavState {
+    object Interests : InterestsScreenNavState()
+    object AddInterest : InterestsScreenNavState()
+    data class EditInterest(val interestId: String) : InterestsScreenNavState()
 }
