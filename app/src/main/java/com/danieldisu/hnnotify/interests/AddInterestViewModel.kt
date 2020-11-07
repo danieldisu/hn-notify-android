@@ -9,7 +9,7 @@ class AddInterestViewModel(
     private val interestRepository: InterestRepository
 ) : ViewModel() {
 
-    val stateFlow = MutableStateFlow(AddInterestsScreenState())
+    val stateFlow = MutableStateFlow(AddInterestsScreenState(interestId))
 
     init {
     }
@@ -29,5 +29,6 @@ class AddInterestViewModel(
 }
 
 data class AddInterestsScreenState(
-    val keywords: List<String> = emptyList()
+    val interestId: String? = null,
+    val keywords: List<String> = emptyList(),
 )

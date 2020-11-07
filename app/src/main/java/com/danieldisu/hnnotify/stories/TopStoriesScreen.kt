@@ -11,12 +11,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.ui.tooling.preview.Preview
 import com.danieldisu.hnnotify.common.ErrorView
 import com.danieldisu.hnnotify.data.entities.Story
 
 @Composable
 fun TopStoriesScreen(
+    navController: NavHostController,
     topStoriesViewModel: TopStoriesViewModel
 ) {
     val screenState = topStoriesViewModel.stateFlow.collectAsState()

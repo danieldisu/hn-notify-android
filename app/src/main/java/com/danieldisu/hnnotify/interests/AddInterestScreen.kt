@@ -10,11 +10,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import androidx.ui.tooling.preview.Preview
 import com.danieldisu.hnnotify.R
 
 @Composable
-fun AddInterestScreen(viewModel: AddInterestViewModel) {
+fun AddInterestScreen(navController: NavHostController, viewModel: AddInterestViewModel) {
     val state = viewModel.stateFlow.collectAsState()
 
     val addInterestDialog =
@@ -47,6 +48,7 @@ fun AddInterestScaffold(
         modifier = Modifier.fillMaxWidth().fillMaxHeight()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
+            Text("Editing ${state.interestId}")
             Row { AddInterestForm(state.keywords, onInterestNameValueChange, onAddKeywordClick) }
             Spacer(modifier = Modifier.height(16.dp))
             ButtonBar(onConfirmButtonClick, onCancelButtonClick)

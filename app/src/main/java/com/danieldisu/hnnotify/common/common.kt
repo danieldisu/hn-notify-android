@@ -34,3 +34,10 @@ fun showAsDialog(showDialog: Boolean, dialog: @Composable () -> Unit) {
         dialog()
     }
 }
+
+@Composable
+fun EmptyContent() {
+
+}
+
+fun noContent(): Any = {}
