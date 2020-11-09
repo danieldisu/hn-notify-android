@@ -19,7 +19,7 @@ class AutoDialog(
     private val rightButtonText: String,
     private val rightButtonAction: () -> Unit,
     private val leftButtonText: String,
-    private val leftButtonAction: () -> Unit,
+    private val leftButtonAction: () -> Unit = {},
     private val content: @Composable () -> Unit,
 ) {
 

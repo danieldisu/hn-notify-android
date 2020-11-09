@@ -18,14 +18,11 @@ import com.danieldisu.hnnotify.R
 fun AddInterestScreen(navController: NavHostController, viewModel: AddInterestViewModel) {
     val state = viewModel.stateFlow.collectAsState()
 
-    val addKeywordDialog =
-        AddKeywordDialog.build(
-            inputLabel = "Enter keyword text",
-            onConfirmButtonClick = {
-                println("YOLODEBUG added keyword $it")
-            },
-            onCancelButtonClick = {}
-        )
+    val addKeywordDialog = AddKeywordDialog(
+        onConfirmButtonClick = {
+            println("YOLODEBUG added keyword $it")
+        }
+    )
 
     AddInterestScaffold(
         state = state.value,
