@@ -20,7 +20,7 @@ fun AddInterestScreen(navController: NavHostController, viewModel: AddInterestVi
 
     val addKeywordDialog = AddKeywordDialog(
         onConfirmButtonClick = {
-            println("YOLODEBUG added keyword $it")
+            viewModel.onAddKeywordDialogSubmit(it)
         }
     )
 
