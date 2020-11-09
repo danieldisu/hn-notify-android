@@ -48,7 +48,6 @@ fun AddInterestScaffold(
         modifier = Modifier.fillMaxWidth().fillMaxHeight()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Text("Editing ${state.interestId}")
             Row { AddInterestForm(state.keywords, onInterestNameValueChange, onAddKeywordClick) }
             Spacer(modifier = Modifier.height(16.dp))
             ButtonBar(onConfirmButtonClick, onCancelButtonClick)
