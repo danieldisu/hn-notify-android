@@ -1,10 +1,7 @@
 package com.danieldisu.hnnotify.common
 
 import androidx.compose.foundation.Text
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -41,3 +38,9 @@ fun EmptyContent() {
 }
 
 fun noContent(): Any = {}
+
+@Composable
+fun HorizontalSpacer() = Spacer(modifier = Modifier.width(16.dp))
+
+@Composable
+fun VerticalSpacer() = Spacer(modifier = Modifier.height(16.dp))
