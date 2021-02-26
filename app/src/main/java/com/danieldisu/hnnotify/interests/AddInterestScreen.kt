@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.ui.tooling.preview.Preview
 import com.danieldisu.hnnotify.R
+import com.danieldisu.hnnotify.common.VerticalSpacer
 
 @Composable
 fun AddInterestScreen(navController: NavHostController, viewModel: AddInterestViewModel) {
@@ -48,25 +49,45 @@ fun AddInterestScaffold(
         modifier = Modifier.fillMaxWidth().fillMaxHeight()
     ) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Row { AddInterestForm(state.keywords, onInterestNameValueChange, onAddKeywordClick) }
-            Spacer(modifier = Modifier.height(16.dp))
+            Row { AddInterestForm(state.keywords, onAddKeywordClick) }
+            VerticalSpacer()
             ButtonBar(onConfirmButtonClick, onCancelButtonClick)
         }
     }
 }
 
 @Composable
-fun AddInterestForm(keywords: List<String>, onValueChange: (String) -> Unit, onAddKeywordClick: () -> Unit) {
+fun AddInterestForm(keywords: List<String>, onAddKeywordClick: () -> Unit) {
     Column {
-        Row { Text(text = "Add an interest", style = MaterialTheme.typography.h6) }
-        Spacer(modifier = Modifier.height(16.dp))
-        Row { AddInterestTextField(onValueChange) }
-        Spacer(modifier = Modifier.height(16.dp))
+        Row { Text(text = "Add an interest", style = MaterialTheme.typography.h4) }
+        VerticalSpacer()
+        Row { AddInterestTextField() }
+        VerticalSpacer()
         Row { KeywordsField(onAddKeywordClick) }
-        Spacer(modifier = Modifier.height(16.dp))
+        VerticalSpacer()
         KeywordList(keywords)
     }
 }
+
+
+@Composable
+private fun AddInterestTextField() =
+    Column {
+        Text(
+            text = "Interest Name",
+            style = MaterialTheme.typography.h6
+        )
+        VerticalSpacer()
+        Row(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+            Text(text = "Interest1")
+            Spacer(modifier = Modifier.weight(1f))
+            TextButton(
+                modifier = Modifier.height(24.dp),
+                onClick = {},
+            ) { Icon(asset = vectorResource(id = R.drawable.ic_edit), modifier = Modifier.size(16.dp)) }
+        }
+    }
+
 
 @Composable
 fun KeywordList(keywords: List<String>) {
@@ -101,7 +122,7 @@ fun RowScope.KeywordsField(onAddKeywordClick: () -> Unit) {
     Row {
         Text(
             text = "Keywords",
-            style = MaterialTheme.typography.subtitle1,
+            style = MaterialTheme.typography.h6,
             modifier = Modifier.align(Alignment.CenterVertically)
         )
         Spacer(modifier = Modifier.weight(1f))
@@ -111,14 +132,6 @@ fun RowScope.KeywordsField(onAddKeywordClick: () -> Unit) {
     }
 
 }
-
-@Composable
-private fun AddInterestTextField(onValueChange: (String) -> Unit) =
-    OutlinedTextField(
-        value = "",
-        label = { Text("Interest Name") },
-        onValueChange = onValueChange
-    )
 
 @Composable
 private fun ColumnScope.ButtonBar(
