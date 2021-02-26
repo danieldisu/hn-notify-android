@@ -1,6 +1,7 @@
 buildscript {
-  ext.kotlin_version = "1.4.10"
-  ext.compose_version = '1.0.0-alpha06'
+  ext.kotlin_version = "1.4.30"
+  ext.compose_version = '1.0.0-beta01'
+  ext.coroutines_version = '1.4.2'
 
   repositories {
     google()
@@ -16,8 +17,8 @@ buildscript {
 allprojects {
   repositories {
     google()
-    jcenter()
     mavenCentral()
+    jcenter()
   }
 
   tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {

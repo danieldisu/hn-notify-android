@@ -1,25 +1,29 @@
 package com.danieldisu.hnnotify.interests
 
-import androidx.compose.foundation.Text
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
 import com.danieldisu.hnnotify.common.ErrorView
 import com.danieldisu.hnnotify.common.LoadingView
 import com.danieldisu.hnnotify.data.interests.Interest
 import com.danieldisu.hnnotify.data.interests.KeywordInterest
-import com.danieldisu.hnnotify.navigation.NavigationTarget
-import com.danieldisu.hnnotify.navigation.navigate
+import com.danieldisu.hnnotify.navigation.AppNavigator
 
 @Composable
 fun InterestsScreen(
-    navController: NavHostController,
-    interestsViewModel: InterestsViewModel
+    interestsViewModel: InterestsViewModel,
+    navigator: AppNavigator,
 ) {
     val screenStateHolder = interestsViewModel.stateFlow.collectAsState()
     val state = screenStateHolder.value
@@ -27,7 +31,7 @@ fun InterestsScreen(
     InterestScaffold(
         value = state,
         onInterestClicked = {
-            navController.navigate(NavigationTarget.EditInterest(it))
+            navigator.toEditInterest(it)
         }
     )
 }
@@ -35,7 +39,7 @@ fun InterestsScreen(
 @Composable
 fun InterestScaffold(
     value: InterestsScreenState,
-    onInterestClicked: (interestId: String) -> Unit
+    onInterestClicked: (interestId: String) -> Unit,
 ) =
     when {
         value.isLoading -> LoadingView()
@@ -45,17 +49,19 @@ fun InterestScaffold(
 
 @Composable
 fun InterestsLoaded(interests: List<Interest>, onInterestClicked: (interestId: String) -> Unit) =
-    Column(Modifier.fillMaxSize().padding(16.dp)) {
+    Column(Modifier
+        .fillMaxSize()
+        .padding(16.dp)) {
         interests.forEach {
-            interestItemViewFactory(it, onInterestClicked)
+            InterestItemViewFactory(it, onInterestClicked)
             Spacer(Modifier.height(16.dp))
         }
     }
 
 @Composable
-private fun interestItemViewFactory(
+private fun InterestItemViewFactory(
     interest: Interest,
-    onInterestClicked: (interestId: String) -> Unit
+    onInterestClicked: (interestId: String) -> Unit,
 ) =
     when (interest) {
         is KeywordInterest -> KeywordInterestItemView(interest, onInterestClicked)
@@ -65,7 +71,9 @@ private fun interestItemViewFactory(
 fun KeywordInterestItemView(interest: KeywordInterest, onInterestClicked: (interestId: String) -> Unit) =
     Surface(
         elevation = 2.dp,
-        modifier = Modifier.fillMaxWidth().clickable(onClick = { onInterestClicked(interest.id) })
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = { onInterestClicked(interest.id) })
     ) {
         Row(modifier = Modifier.padding(16.dp)) {
             Text(text = interest.name)
