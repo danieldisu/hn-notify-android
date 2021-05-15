@@ -18,12 +18,10 @@ import com.danieldisu.hnnotify.common.ErrorView
 import com.danieldisu.hnnotify.common.LoadingView
 import com.danieldisu.hnnotify.data.interests.Interest
 import com.danieldisu.hnnotify.data.interests.KeywordInterest
-import com.danieldisu.hnnotify.navigation.AppNavigator
 
 @Composable
 fun InterestsScreen(
     interestsViewModel: InterestsViewModel,
-    navigator: AppNavigator,
 ) {
     val screenStateHolder = interestsViewModel.stateFlow.collectAsState()
     val state = screenStateHolder.value
@@ -31,7 +29,7 @@ fun InterestsScreen(
     InterestScaffold(
         value = state,
         onInterestClicked = {
-            navigator.toEditInterest(it)
+//            navigator.toEditInterest(it)
         }
     )
 }

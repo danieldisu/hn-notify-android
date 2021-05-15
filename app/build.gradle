@@ -64,6 +64,7 @@ dependencies {
   implementation "androidx.compose.ui:ui-tooling:$compose_version"
   implementation "androidx.compose.runtime:runtime-livedata:$compose_version"
 
+  implementation "androidx.navigation:navigation-compose:1.0.0-alpha10"
 
 
   def koin_version = "3.0.1"
