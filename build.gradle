@@ -1,14 +1,14 @@
 buildscript {
-  ext.kotlin_version = "1.4.30"
-  ext.compose_version = '1.0.0-beta01'
-  ext.coroutines_version = '1.4.2'
+  ext.kotlin_version = "1.5.0"
+  ext.compose_version = '1.0.0-beta06'
+  ext.coroutines_version = '1.5.0'
 
   repositories {
     google()
-    jcenter()
+    mavenCentral()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:7.0.0-alpha08'
+    classpath 'com.android.tools.build:gradle:7.0.0-alpha15'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
   }
@@ -18,7 +18,6 @@ allprojects {
   repositories {
     google()
     mavenCentral()
-    jcenter()
   }
 
   tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
