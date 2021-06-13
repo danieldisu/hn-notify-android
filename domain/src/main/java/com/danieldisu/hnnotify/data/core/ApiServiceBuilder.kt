@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 object ApiServiceBuilder {
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("http://10.0.2.2:8080")
+        .baseUrl("https://hn-notify-backend.herokuapp.com/")
         .addConverterFactory(ApiResultConverterFactory)
         .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
         .addCallAdapterFactory(ApiResultCallAdapterFactory)
