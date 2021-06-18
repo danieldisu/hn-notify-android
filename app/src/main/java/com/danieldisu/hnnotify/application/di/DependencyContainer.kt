@@ -2,6 +2,7 @@ package com.danieldisu.hnnotify.application.di
 
 import android.content.Context
 import com.danieldisu.hnnotify.application.di.modules.DataModule
+import com.danieldisu.hnnotify.application.di.modules.DomainModule
 import com.danieldisu.hnnotify.application.di.modules.UiModule
 import com.danieldisu.hnnotify.navigation.AppNavigator
 import com.danieldisu.hnnotify.navigation.AppNavigatorImpl
@@ -16,6 +17,7 @@ object DependencyContainer {
 
     private val modules = sequence<Module> {
         yield(DataModule())
+        yield(DomainModule())
         yield(UiModule())
         yield(module {
             factory<AppNavigator> { AppNavigatorImpl }

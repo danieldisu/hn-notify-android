@@ -24,7 +24,6 @@ allprojects {
     kotlinOptions {
       freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
       freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
-      freeCompilerArgs += '-Xallow-jvm-ir-dependencies'
       freeCompilerArgs += "-XXLanguage:+InlineClasses"
       freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
       freeCompilerArgs += "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi"

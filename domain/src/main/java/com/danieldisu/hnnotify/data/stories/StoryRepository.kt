@@ -2,17 +2,15 @@ package com.danieldisu.hnnotify.data.stories
 
 import com.danieldisu.hnnotify.data.core.ApiErrorDto
 import com.danieldisu.hnnotify.data.core.mapValue
-import com.danieldisu.hnnotify.data.entities.Story
+import com.danieldisu.hnnotify.data.stories.api.StoryApi
 import com.slack.eithernet.ApiResult
 
 class StoryRepository(
     private val storyApi: StoryApi
 ) {
 
-    private val hardcodedUserId = "1"
-
-    suspend fun getInterestingTopStories(): ApiResult<List<Story>, ApiErrorDto> =
-        storyApi.getInterestingTopStories(hardcodedUserId)
+    suspend fun getInterestingTopStories(userId: String): ApiResult<List<Story>, ApiErrorDto> =
+        storyApi.getInterestingTopStories(userId)
             .mapValue { it.stories }
 
 }

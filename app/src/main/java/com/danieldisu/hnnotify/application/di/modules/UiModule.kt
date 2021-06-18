@@ -11,7 +11,7 @@ object UiModule {
     operator fun invoke() = module {
         viewModel { TopStoriesViewModel(get()) }
         viewModel { InterestsViewModel(get()) }
-        viewModel { (interestId: String) -> AddInterestViewModel(interestId, get()) }
+        viewModel { AddInterestViewModel(it[0], get()) }
     }
 
 }

@@ -1,7 +1,7 @@
-package com.danieldisu.hnnotify.data.stories
+package com.danieldisu.hnnotify.data.stories.api
 
 import com.danieldisu.hnnotify.data.core.ApiErrorDto
-import com.danieldisu.hnnotify.data.entities.GetInterestingTopStoriesResponse
+import com.danieldisu.hnnotify.data.stories.api.GetInterestingTopStoriesResponse
 import com.slack.eithernet.ApiResult
 import retrofit2.http.GET
 import retrofit2.http.Path

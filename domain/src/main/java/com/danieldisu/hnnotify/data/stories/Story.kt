@@ -1,4 +1,4 @@
-package com.danieldisu.hnnotify.data.entities
+package com.danieldisu.hnnotify.data.stories
 
 import kotlinx.serialization.Serializable
 

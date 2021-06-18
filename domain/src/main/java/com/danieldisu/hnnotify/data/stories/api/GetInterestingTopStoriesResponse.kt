@@ -1,5 +1,6 @@
-package com.danieldisu.hnnotify.data.entities
+package com.danieldisu.hnnotify.data.stories.api
 
+import com.danieldisu.hnnotify.data.stories.Story
 import kotlinx.serialization.Serializable
 
 @Serializable

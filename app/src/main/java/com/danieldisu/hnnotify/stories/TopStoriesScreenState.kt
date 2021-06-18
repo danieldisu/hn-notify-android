@@ -1,6 +1,6 @@
 package com.danieldisu.hnnotify.stories
 
-import com.danieldisu.hnnotify.data.entities.Story
+import com.danieldisu.hnnotify.data.stories.Story
 
 sealed class TopStoriesScreenState {
     object Initial : TopStoriesScreenState()
