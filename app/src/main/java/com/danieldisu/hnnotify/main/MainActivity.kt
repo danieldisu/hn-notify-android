@@ -18,17 +18,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.danieldisu.hnnotify.R
-import com.danieldisu.hnnotify.interests.InterestsScreen
 import com.danieldisu.hnnotify.navigation.AppNavigator
-import com.danieldisu.hnnotify.stories.TopStoriesScreen
+import com.danieldisu.hnnotify.navigation.NavigationGraph
+import com.danieldisu.hnnotify.navigation.NavigationRoute
 import org.koin.android.ext.android.inject
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,25 +46,8 @@ class MainActivity : AppCompatActivity() {
                     bottomBar = bottomBar(navController, bottomBarScreens),
                     floatingActionButton = actionButton(navigator)
                 ) {
-                    NavigationHost(navController = navController)
+                    NavigationGraph(navController = navController)
                 }
-            }
-        }
-    }
-
-    @Composable
-    fun NavigationHost(
-        navController: NavController,
-    ) {
-        NavHost(
-            navController = navController as NavHostController,
-            startDestination = TopStoriesBottomBarScreen.route.routeValue
-        ) {
-            composable(InterestBottomBarScreen.route.routeValue) {
-                InterestsScreen(interestsViewModel = getViewModel())
-            }
-            composable(TopStoriesBottomBarScreen.route.routeValue) {
-                TopStoriesScreen(topStoriesViewModel = getViewModel())
             }
         }
     }
@@ -105,24 +85,18 @@ class MainActivity : AppCompatActivity() {
         BottomNavigationItem(
             icon = { Icon(painter = painterResource(id = bottomBarScreen.icon), contentDescription = null) },
             label = { Text(stringResource(bottomBarScreen.label)) },
-            selected = currentRoute == bottomBarScreen.route.routeValue,
+            selected = currentRoute == bottomBarScreen.route.getRouteValue(),
             onClick = {
-                navController.navigate(bottomBarScreen.route.routeValue) {
-//                    // Pop up to the start destination of the graph to
-//                    // avoid building up a large stack of destinations
-//                    // on the back stack as users select items
-//                    popUpTo = navController.graph.startDestination
-                    // Avoid multiple copies of the same destination when
-                    // reselecting the same item
-//                    launchSingleTop = true
+                navController.navigate(bottomBarScreen.route.getRouteValue()) {
+                    popUpTo(navController.graph.findStartDestination().id) {
+                        saveState = true
+                    }
+                    launchSingleTop = true
+                    restoreState = true
                 }
             }
         )
     }
-
-    data class NavigationRoute(
-        val routeValue: String,
-    )
 
     abstract class BottomBarScreen(
         val route: NavigationRoute,
@@ -131,13 +105,13 @@ class MainActivity : AppCompatActivity() {
     )
 
     object InterestBottomBarScreen : BottomBarScreen(
-        route = NavigationRoute("Interests"),
+        route = NavigationRoute.Interests,
         label = R.string.bottom_bar_label_interests,
         icon = R.drawable.ic_book
     )
 
     object TopStoriesBottomBarScreen : BottomBarScreen(
-        route = NavigationRoute("TopStories"),
+        route = NavigationRoute.TopStories,
         label = R.string.bottom_bar_label_stories,
         icon = R.drawable.ic_home
     )
