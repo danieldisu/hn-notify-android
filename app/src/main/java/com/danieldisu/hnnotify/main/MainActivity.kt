@@ -36,6 +36,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val navController = rememberNavController()
+
             val bottomBarScreens = listOf(
                 TopStoriesBottomBarScreen,
                 InterestBottomBarScreen,

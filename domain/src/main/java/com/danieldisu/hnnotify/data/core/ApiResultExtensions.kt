@@ -29,4 +29,4 @@ fun <T, E> ApiResult<T, E>.logErrors(): ApiResult<T, E> =
     }
 
 @Serializable
-class ApiErrorDto
+object ApiErrorDto

@@ -1,9 +1,15 @@
 package com.danieldisu.hnnotify.interests
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.danieldisu.hnnotify.common.updateState
+import com.danieldisu.hnnotify.data.core.ApiErrorDto
+import com.danieldisu.hnnotify.data.interests.Interest
 import com.danieldisu.hnnotify.data.interests.InterestRepository
+import com.danieldisu.hnnotify.data.interests.KeywordInterest
+import com.slack.eithernet.ApiResult
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
 class AddInterestViewModel(
     private val interestId: String?,
@@ -13,7 +19,9 @@ class AddInterestViewModel(
     val stateFlow = MutableStateFlow(AddInterestsScreenState(interestId))
 
     init {
+        loadInterestInfo()
     }
+
 
     fun onConfirmButtonClick() {
 
@@ -33,6 +41,25 @@ class AddInterestViewModel(
         }
     }
 
+    private fun loadInterestInfo() = viewModelScope.launch {
+        if (interestId != null) {
+            when (val getInterestResult = interestRepository.getInterest("1", interestId)) {
+                is ApiResult.Success -> onGetInterestInfoSuccess(getInterestResult)
+                is ApiResult.Failure -> onGetInterestInfoError(getInterestResult)
+            }
+        }
+    }
+
+    private fun onGetInterestInfoSuccess(getInterestResult: ApiResult.Success<Interest>) {
+        stateFlow.value = AddInterestsScreenState(
+            interestId = interestId,
+            keywords = (getInterestResult.response as KeywordInterest).keywords
+        )
+    }
+
+    private fun onGetInterestInfoError(interestResult: ApiResult.Failure<ApiErrorDto>) {
+        TODO()
+    }
 }
 
 

@@ -27,7 +27,7 @@ fun NavigationGraph(navController: NavController) {
                 }
                 NavigationRouteAddress.Interests -> {
                     composable(navigationRouteAddress.value) {
-                        InterestsScreen(interestsViewModel = getViewModel())
+                        InterestsScreen(interestsViewModel = getViewModel(), navController)
                     }
                 }
                 NavigationRouteAddress.AddInterest -> {

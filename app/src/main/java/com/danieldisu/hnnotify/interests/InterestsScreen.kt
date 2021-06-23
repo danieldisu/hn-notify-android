@@ -14,22 +14,26 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.danieldisu.hnnotify.common.ErrorView
 import com.danieldisu.hnnotify.common.LoadingView
 import com.danieldisu.hnnotify.data.interests.Interest
 import com.danieldisu.hnnotify.data.interests.KeywordInterest
+import com.danieldisu.hnnotify.navigation.NavigationRoute
+import com.danieldisu.hnnotify.navigation.navigate
 
 @Composable
 fun InterestsScreen(
     interestsViewModel: InterestsViewModel,
+    navController: NavController,
 ) {
     val screenStateHolder = interestsViewModel.stateFlow.collectAsState()
     val state = screenStateHolder.value
 
     InterestScaffold(
         value = state,
-        onInterestClicked = {
-//            navigator.toEditInterest(it)
+        onInterestClicked = { interestId ->
+            navController.navigate(NavigationRoute.EditInterest(interestId))
         }
     )
 }
@@ -47,9 +51,11 @@ fun InterestScaffold(
 
 @Composable
 fun InterestsLoaded(interests: List<Interest>, onInterestClicked: (interestId: String) -> Unit) =
-    Column(Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         interests.forEach {
             InterestItemViewFactory(it, onInterestClicked)
             Spacer(Modifier.height(16.dp))
