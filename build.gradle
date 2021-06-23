@@ -1,11 +1,14 @@
 buildscript {
-  ext.kotlin_version = "1.3.61"
+  ext.kotlin_version = "1.5.10"
+  ext.compose_version = '1.0.0-beta09'
+  ext.coroutines_version = '1.5.0'
+
   repositories {
     google()
-    jcenter()
+    mavenCentral()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:4.1.2'
+    classpath 'com.android.tools.build:gradle:7.1.0-alpha02'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
   }
@@ -14,14 +17,22 @@ buildscript {
 allprojects {
   repositories {
     google()
-    jcenter()
-    maven {
-      name = "GitHubPackages"
-      url = uri("https://maven.pkg.github.com/danieldisu/kollection-view")
-      credentials {
-        username = github_packages_user
-        password = github_packages_token
-      }
+    mavenCentral()
+  }
+
+  tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+    kotlinOptions {
+      freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
+      freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
+      freeCompilerArgs += "-XXLanguage:+InlineClasses"
+      freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
+      freeCompilerArgs += "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi"
+      freeCompilerArgs += "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi"
+      freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+      freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+
+      // Set JVM target to 1.8
+      jvmTarget = "1.8"
     }
   }
 }

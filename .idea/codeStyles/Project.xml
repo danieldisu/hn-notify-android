@@ -29,16 +29,10 @@
     </option>
     <option name="RIGHT_MARGIN" value="120" />
     <JetCodeStyleSettings>
-      <option name="PACKAGES_TO_USE_STAR_IMPORTS">
-        <value>
-          <package name="kotlinx.android.synthetic" withSubpackages="true" static="false" />
-        </value>
-      </option>
+      <option name="NAME_COUNT_TO_USE_STAR_IMPORT" value="2147483647" />
+      <option name="NAME_COUNT_TO_USE_STAR_IMPORT_FOR_MEMBERS" value="2147483647" />
       <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
     </JetCodeStyleSettings>
-    <XML>
-      <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
-    </XML>
     <codeStyleSettings language="Groovy">
       <indentOptions>
         <option name="INDENT_SIZE" value="2" />
@@ -47,10 +41,9 @@
       </indentOptions>
     </codeStyleSettings>
     <codeStyleSettings language="XML">
+      <option name="FORCE_REARRANGE_MODE" value="1" />
       <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="2" />
-        <option name="TAB_SIZE" value="2" />
+        <option name="CONTINUATION_INDENT_SIZE" value="4" />
       </indentOptions>
       <arrangement>
         <rules>
@@ -59,7 +52,6 @@
               <match>
                 <AND>
                   <NAME>xmlns:android</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>^$</XML_NAMESPACE>
                 </AND>
               </match>
@@ -70,7 +62,6 @@
               <match>
                 <AND>
                   <NAME>xmlns:.*</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>^$</XML_NAMESPACE>
                 </AND>
               </match>
@@ -82,7 +73,6 @@
               <match>
                 <AND>
                   <NAME>.*:id</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
                 </AND>
               </match>
@@ -93,7 +83,6 @@
               <match>
                 <AND>
                   <NAME>.*:name</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
                 </AND>
               </match>
@@ -104,7 +93,6 @@
               <match>
                 <AND>
                   <NAME>name</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>^$</XML_NAMESPACE>
                 </AND>
               </match>
@@ -115,7 +103,6 @@
               <match>
                 <AND>
                   <NAME>style</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>^$</XML_NAMESPACE>
                 </AND>
               </match>
@@ -126,7 +113,6 @@
               <match>
                 <AND>
                   <NAME>.*</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>^$</XML_NAMESPACE>
                 </AND>
               </match>
@@ -138,7 +124,6 @@
               <match>
                 <AND>
                   <NAME>.*</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>http://schemas.android.com/apk/res/android</XML_NAMESPACE>
                 </AND>
               </match>
@@ -150,7 +135,6 @@
               <match>
                 <AND>
                   <NAME>.*</NAME>
-                  <XML_ATTRIBUTE />
                   <XML_NAMESPACE>.*</XML_NAMESPACE>
                 </AND>
               </match>
@@ -161,12 +145,15 @@
       </arrangement>
     </codeStyleSettings>
     <codeStyleSettings language="kotlin">
-      <option name="CODE_STYLE_DEFAULTS" value="KOTLIN_OFFICIAL" />
-      <indentOptions>
-        <option name="INDENT_SIZE" value="2" />
-        <option name="CONTINUATION_INDENT_SIZE" value="4" />
-        <option name="TAB_SIZE" value="2" />
-      </indentOptions>
+      <option name="CALL_PARAMETERS_WRAP" value="5" />
+      <option name="CALL_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
+      <option name="CALL_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
+      <option name="METHOD_PARAMETERS_WRAP" value="5" />
+      <option name="METHOD_PARAMETERS_LPAREN_ON_NEXT_LINE" value="true" />
+      <option name="METHOD_PARAMETERS_RPAREN_ON_NEXT_LINE" value="true" />
+      <option name="EXTENDS_LIST_WRAP" value="1" />
+      <option name="METHOD_CALL_CHAIN_WRAP" value="1" />
+      <option name="ASSIGNMENT_WRAP" value="1" />
     </codeStyleSettings>
   </code_scheme>
 </component>
