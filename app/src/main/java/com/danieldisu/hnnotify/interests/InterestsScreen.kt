@@ -18,7 +18,6 @@ import androidx.navigation.NavController
 import com.danieldisu.hnnotify.common.ErrorView
 import com.danieldisu.hnnotify.common.LoadingView
 import com.danieldisu.hnnotify.data.interests.Interest
-import com.danieldisu.hnnotify.data.interests.KeywordInterest
 import com.danieldisu.hnnotify.navigation.NavigationRoute
 import com.danieldisu.hnnotify.navigation.navigate
 
@@ -57,22 +56,13 @@ fun InterestsLoaded(interests: List<Interest>, onInterestClicked: (interestId: S
             .padding(16.dp)
     ) {
         interests.forEach {
-            InterestItemViewFactory(it, onInterestClicked)
+            KeywordInterestItemView(it, onInterestClicked)
             Spacer(Modifier.height(16.dp))
         }
     }
 
 @Composable
-private fun InterestItemViewFactory(
-    interest: Interest,
-    onInterestClicked: (interestId: String) -> Unit,
-) =
-    when (interest) {
-        is KeywordInterest -> KeywordInterestItemView(interest, onInterestClicked)
-    }
-
-@Composable
-fun KeywordInterestItemView(interest: KeywordInterest, onInterestClicked: (interestId: String) -> Unit) =
+fun KeywordInterestItemView(interest: Interest, onInterestClicked: (interestId: String) -> Unit) =
     Surface(
         elevation = 2.dp,
         modifier = Modifier

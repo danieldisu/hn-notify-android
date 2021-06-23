@@ -6,7 +6,6 @@ import com.danieldisu.hnnotify.common.updateState
 import com.danieldisu.hnnotify.data.core.ApiErrorDto
 import com.danieldisu.hnnotify.data.interests.Interest
 import com.danieldisu.hnnotify.data.interests.InterestRepository
-import com.danieldisu.hnnotify.data.interests.KeywordInterest
 import com.slack.eithernet.ApiResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -53,7 +52,7 @@ class AddInterestViewModel(
     private fun onGetInterestInfoSuccess(getInterestResult: ApiResult.Success<Interest>) {
         stateFlow.value = AddInterestsScreenState(
             interestId = interestId,
-            keywords = (getInterestResult.response as KeywordInterest).keywords
+            keywords = getInterestResult.response.keywords
         )
     }
 

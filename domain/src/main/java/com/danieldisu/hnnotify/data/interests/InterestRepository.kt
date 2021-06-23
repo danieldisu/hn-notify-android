@@ -13,7 +13,7 @@ class InterestRepository(
 ) {
 
     suspend fun saveInterest(interest: RecentlyCreatedKeywordInterest): InterestOrError {
-        return ApiResult.Success(KeywordInterest("3", interest.name ?: "", interest.keywords))
+        return ApiResult.Success(Interest("3", interest.name ?: "", interest.keywords))
     }
 
     suspend fun getInterests(userId: String): ApiResult<List<Interest>, ApiErrorDto> =
@@ -22,7 +22,7 @@ class InterestRepository(
 
     suspend fun updateInterest(interest: RecentlyUpdatedInterest): InterestOrError {
         interest as RecentlyUpdatedKeywordInterest
-        return ApiResult.Success(KeywordInterest(interest.id, interest.name ?: "", interest.keywords))
+        return ApiResult.Success(Interest(interest.id, interest.name ?: "", interest.keywords))
     }
 
     suspend fun getInterest(userId: String, interestId: String): InterestOrError {
@@ -42,4 +42,4 @@ class InterestRepository(
 }
 
 private fun toDomainInterest(httpInterest: HttpInterest) =
-    KeywordInterest(httpInterest.interestName, httpInterest.interestName, httpInterest.interestKeywords)
+    Interest(httpInterest.interestName, httpInterest.interestName, httpInterest.interestKeywords)
