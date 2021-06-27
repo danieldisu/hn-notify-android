@@ -7,7 +7,7 @@ import retrofit2.http.Path
 
 interface InterestApi {
 
-    @GET("user/{userId}/interests")
+    @GET("user/{userId}/interest")
     suspend fun getUserInterests(
         @Path("userId") userId: String
     ): ApiResult<GetUserInterestsApiResponse, ApiErrorDto>
