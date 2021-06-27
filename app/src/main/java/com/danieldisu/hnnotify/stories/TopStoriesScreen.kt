@@ -4,12 +4,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -62,14 +62,22 @@ fun TopStoriesLoading() {
 
 @Composable
 private fun TopStoriesLoaded(stories: List<Story>, onStoryClick: () -> Unit) =
-    Column(Modifier
-        .fillMaxSize()
-        .padding(16.dp)) {
-        stories.forEach {
+    LazyColumn(
+        Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(stories) {
             StoryItemView(it, onStoryClick)
-            Spacer(Modifier.height(16.dp))
         }
     }
+//    Column(Modifier
+//        .fillMaxSize()
+//        .padding(16.dp)) {
+//        stories.forEach {
+//            StoryItemView(it, onStoryClick)
+//            Spacer(Modifier.height(16.dp))
+//        }
+//    }
 
 @Composable
 private fun StoryItemView(story: Story, onStoryClick: () -> Unit) {
@@ -97,7 +105,7 @@ fun StoryPreview() {
 }
 
 @Composable
-//@Preview(showBackground = true)
+@Preview(showBackground = true)
 private fun TopStoriesLoadedPreview() {
     val stories = listOf(
         Story("1", "apple do it again"),
