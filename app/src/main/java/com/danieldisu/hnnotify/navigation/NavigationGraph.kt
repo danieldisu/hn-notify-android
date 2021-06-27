@@ -5,7 +5,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.danieldisu.hnnotify.interests.AddInterestScreen
+import com.danieldisu.hnnotify.interests.InterestDetailScreen
 import com.danieldisu.hnnotify.interests.InterestsScreen
 import com.danieldisu.hnnotify.stories.TopStoriesScreen
 import org.koin.androidx.compose.getViewModel
@@ -32,13 +32,13 @@ fun NavigationGraph(navController: NavController) {
                 }
                 NavigationRouteAddress.AddInterest -> {
                     composable(navigationRouteAddress.value) {
-                        AddInterestScreen(viewModel = getViewModel(parameters = { parametersOf(null) }))
+                        InterestDetailScreen(viewModel = getViewModel(parameters = { parametersOf(null) }))
                     }
                 }
                 NavigationRouteAddress.EditInterest -> {
                     composable(navigationRouteAddress.value) {
                         val interestId = it.arguments?.getString("interestId")
-                        AddInterestScreen(viewModel = getViewModel(parameters = { parametersOf(interestId) }))
+                        InterestDetailScreen(viewModel = getViewModel(parameters = { parametersOf(interestId) }))
                     }
                 }
             }
