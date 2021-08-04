@@ -42,6 +42,10 @@ class InterestDetailViewModel(
 
     }
 
+    fun onAddKeywordClick() {
+        stateFlow.value = stateFlow.value.copy(isShowingAddKeywordDialog = true)
+    }
+
     fun onAddKeywordDialogSubmit(newKeyword: String) {
         stateFlow.updateState {
             it.copy(keywords = it.keywords.plus(newKeyword))
@@ -76,4 +80,5 @@ data class InterestDetailScreenState(
     val isEdit: Boolean = interestId != null,
     val keywords: List<String> = emptyList(),
     val interestName: String? = null,
+    val isShowingAddKeywordDialog: Boolean = false,
 )

@@ -1,7 +1,6 @@
 package com.danieldisu.hnnotify.interests
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
@@ -33,18 +32,17 @@ import com.danieldisu.hnnotify.common.VerticalSpacer
 fun InterestDetailScreen(viewModel: InterestDetailViewModel) {
     val state = viewModel.stateFlow.collectAsState()
 
-    val addKeywordDialog = AddKeywordDialog(
-        onConfirmButtonClick = {
-            viewModel.onAddKeywordDialogSubmit(it)
-        }
-    )
+    if (state.value.isShowingAddKeywordDialog) {
+        AddKeywordDialog(
+            onConfirmButtonClick = {},
+            onDismiss = {},
+        )
+    }
 
     InterestDetailScaffold(
         state = state.value,
         onInterestNameValueChange = viewModel::onInterestNameValueChange,
-        onAddKeywordClick = {
-            addKeywordDialog.show()
-        },
+        onAddKeywordClick = viewModel::onAddKeywordClick,
         onEditNameClick = viewModel::onEditNameClick,
         onEditKeywordClick = viewModel::onEditKeywordClick,
         onDeleteKeywordClick = viewModel::onDeleteKeywordClick,
@@ -83,7 +81,7 @@ fun InterestDetailScaffold(
 }
 
 @Composable
-private fun ColumnScope.TitleRow(isEdit: Boolean, onConfirmClick: () -> Unit) {
+private fun TitleRow(isEdit: Boolean, onConfirmClick: () -> Unit) {
     Row {
         Text(text = getTitle(isEdit), style = MaterialTheme.typography.h4)
         Spacer(Modifier.weight(1f))
