@@ -10,12 +10,12 @@ import com.slack.eithernet.ApiResult
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class AddInterestViewModel(
+class InterestDetailViewModel(
     private val interestId: String?,
     private val interestRepository: InterestRepository,
 ) : ViewModel() {
 
-    val stateFlow = MutableStateFlow(AddInterestsScreenState(interestId))
+    val stateFlow = MutableStateFlow(InterestDetailScreenState(interestId = interestId))
 
     init {
         loadInterestInfo()
@@ -26,12 +26,24 @@ class AddInterestViewModel(
 
     }
 
-    fun onCancelButtonClick() {
+    fun onEditNameClick() {
+
+    }
+
+    fun onEditKeywordClick(keyword: String) {
+
+    }
+
+    fun onDeleteKeywordClick(keyword: String) {
 
     }
 
     fun onInterestNameValueChange(newInterestName: String) {
 
+    }
+
+    fun onAddKeywordClick() {
+        stateFlow.value = stateFlow.value.copy(isShowingAddKeywordDialog = true)
     }
 
     fun onAddKeywordDialogSubmit(newKeyword: String) {
@@ -50,9 +62,10 @@ class AddInterestViewModel(
     }
 
     private fun onGetInterestInfoSuccess(getInterestResult: ApiResult.Success<Interest>) {
-        stateFlow.value = AddInterestsScreenState(
+        stateFlow.value = InterestDetailScreenState(
             interestId = interestId,
-            keywords = getInterestResult.response.keywords
+            keywords = getInterestResult.response.keywords,
+            interestName = getInterestResult.response.name
         )
     }
 
@@ -62,7 +75,10 @@ class AddInterestViewModel(
 }
 
 
-data class AddInterestsScreenState(
+data class InterestDetailScreenState(
     val interestId: String? = null,
+    val isEdit: Boolean = interestId != null,
     val keywords: List<String> = emptyList(),
+    val interestName: String? = null,
+    val isShowingAddKeywordDialog: Boolean = false,
 )
