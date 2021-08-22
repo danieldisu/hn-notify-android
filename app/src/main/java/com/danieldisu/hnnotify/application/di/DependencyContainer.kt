@@ -4,8 +4,6 @@ import android.content.Context
 import com.danieldisu.hnnotify.application.di.modules.DataModule
 import com.danieldisu.hnnotify.application.di.modules.DomainModule
 import com.danieldisu.hnnotify.application.di.modules.UiModule
-import com.danieldisu.hnnotify.navigation.AppNavigator
-import com.danieldisu.hnnotify.navigation.AppNavigatorImpl
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -20,7 +18,6 @@ object DependencyContainer {
         yield(DomainModule())
         yield(UiModule())
         yield(module {
-            factory<AppNavigator> { AppNavigatorImpl }
         })
     }
 

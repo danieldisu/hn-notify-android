@@ -22,14 +22,10 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.danieldisu.hnnotify.R
-import com.danieldisu.hnnotify.navigation.AppNavigator
 import com.danieldisu.hnnotify.navigation.NavigationGraph
 import com.danieldisu.hnnotify.navigation.NavigationRoute
-import org.koin.android.ext.android.inject
 
 class MainActivity : AppCompatActivity() {
-
-    private val navigator: AppNavigator by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,7 +41,7 @@ class MainActivity : AppCompatActivity() {
             MaterialTheme {
                 Scaffold(
                     bottomBar = bottomBar(navController, bottomBarScreens),
-                    floatingActionButton = actionButton(navigator)
+                    floatingActionButton = actionButton()
                 ) {
                     NavigationGraph(navController = navController)
                 }
@@ -53,7 +49,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun actionButton(appNavigator: AppNavigator): @Composable () -> Unit = {
+    private fun actionButton(): @Composable () -> Unit = {
 //        val navBackStackEntry by navController.currentBackStackEntryAsState()
 //        when (navBackStackEntry.getCurrentFirstLevelScreen()) {
 //            FirstLevelScreen.TopStories -> noContent()
