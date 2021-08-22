@@ -4,8 +4,20 @@ package com.danieldisu.hnnotify.navigation
 enum class NavigationRouteAddress(val value: String) {
     TopStories("/topstories"),
     Interests("/interests"),
-    AddInterest("/interests/add"),
-    EditInterest("/interests/edit/{interestId}"),
+    AddInterest("/addInterest"),
+    EditInterest("/editInterest/{interestId}");
+
+    companion object {
+        fun fromRoute(routePath: String): NavigationRouteAddress {
+            return values().find { routePath.takeFirstPath() == it.value.takeFirstPath() }
+                ?: throw IllegalStateException("No NavigationRouteAddress for path $routePath")
+        }
+    }
+
+}
+
+private fun String.takeFirstPath(): String {
+    return this.split("/").getOrNull(1) ?: throw IllegalStateException("Illegal path $this")
 }
 
 sealed class NavigationRoute(

@@ -44,3 +44,5 @@ fun HorizontalSpacer() = Spacer(modifier = Modifier.width(16.dp))
 
 @Composable
 fun VerticalSpacer() = Spacer(modifier = Modifier.height(16.dp))
+
+typealias ComposableUnit = @Composable () -> Unit

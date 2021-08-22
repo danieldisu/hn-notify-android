@@ -22,6 +22,7 @@ import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.danieldisu.hnnotify.R
+import com.danieldisu.hnnotify.main.bottombar.bottomBarActionButton
 import com.danieldisu.hnnotify.navigation.NavigationGraph
 import com.danieldisu.hnnotify.navigation.NavigationRoute
 
@@ -41,21 +42,12 @@ class MainActivity : AppCompatActivity() {
             MaterialTheme {
                 Scaffold(
                     bottomBar = bottomBar(navController, bottomBarScreens),
-                    floatingActionButton = actionButton()
+                    floatingActionButton = bottomBarActionButton(navController)
                 ) {
                     NavigationGraph(navController = navController)
                 }
             }
         }
-    }
-
-    private fun actionButton(): @Composable () -> Unit = {
-//        val navBackStackEntry by navController.currentBackStackEntryAsState()
-//        when (navBackStackEntry.getCurrentFirstLevelScreen()) {
-//            FirstLevelScreen.TopStories -> noContent()
-//            FirstLevelScreen.Interests -> AddInterestFloatingButton(navController)
-//            null -> noContent()
-//        }
     }
 
     private fun bottomBar(
