@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.danieldisu.hnnotify">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".HNNotifyApplication"
         android:allowBackup="true"
@@ -17,6 +19,7 @@
 
         <activity
             android:name=".main.MainActivity"
+            android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -26,7 +29,5 @@
             </intent-filter>
         </activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>
