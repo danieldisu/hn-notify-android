@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -17,8 +19,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,7 +35,6 @@ interface AddKeywordEventListener {
     fun onSkipClicked()
     fun onContinueClicked()
     fun onCurrentInputValueChanged(value: String)
-    fun onKeyboardSubmit()
     fun onAddMoreClicked()
 }
 
@@ -122,13 +123,10 @@ private fun KeywordTextInput(inputError: InputError?, eventListener: AddKeywordE
             updateTextState(it)
             eventListener.onCurrentInputValueChanged(it.text)
         },
-        modifier = Modifier
-            .fillMaxWidth()
-            .onKeyEvent {
-                eventListener.onKeyboardSubmit()
-                true
-            },
-        isError = inputError != null
+        modifier = Modifier.fillMaxWidth(),
+        isError = inputError != null,
+        keyboardActions = KeyboardActions { eventListener.onContinueClicked() },
+        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     )
     if (inputError != null) {
         Text(
@@ -144,12 +142,12 @@ private fun KeywordTextInput(inputError: InputError?, eventListener: AddKeywordE
 private fun AddInterestKeywordHelpText(firstKeyword: Boolean) {
     if (firstKeyword) {
         Text(
-            text = stringResource(id = R.string.label_add_interest_help_text),
+            text = stringResource(id = R.string.label_add_keyword_help_text),
             style = MaterialTheme.typography.h6
         )
     } else {
         Text(
-            text = stringResource(id = R.string.label_add_another_interest_help_text),
+            text = stringResource(id = R.string.label_add_another_keyword_help_text),
             style = MaterialTheme.typography.h6
         )
     }
@@ -203,9 +201,6 @@ private fun emptyListener() = object : AddKeywordEventListener {
     }
 
     override fun onCurrentInputValueChanged(value: String) {
-    }
-
-    override fun onKeyboardSubmit() {
     }
 
     override fun onAddMoreClicked() {

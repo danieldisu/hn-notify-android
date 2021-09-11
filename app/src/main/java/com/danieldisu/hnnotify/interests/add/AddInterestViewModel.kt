@@ -6,15 +6,20 @@ import com.danieldisu.hnnotify.common.InputError
 import com.danieldisu.hnnotify.common.ResString
 import com.danieldisu.hnnotify.common.ScreenState
 import com.danieldisu.hnnotify.common.update
+import com.danieldisu.hnnotify.interests.add.views.AddInterestNameViewEventListener
 import com.danieldisu.hnnotify.interests.add.views.AddKeywordEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class AddInterestViewModel : ViewModel(), AddKeywordEventListener {
+class AddInterestViewModel : ViewModel(), AddKeywordEventListener, AddInterestNameViewEventListener {
 
     val stateFlow: MutableStateFlow<AddInterestScreenState> =
         MutableStateFlow(AddInterestScreenState.AddFirstKeywordStep())
 
     init {
+
+    }
+
+    override fun onCreateClicked() {
 
     }
 
@@ -28,14 +33,10 @@ class AddInterestViewModel : ViewModel(), AddKeywordEventListener {
         }.update(stateFlow)
     }
 
-    override fun onKeyboardSubmit() {
-
-    }
-
     override fun onContinueClicked() {
         when (val currentState = stateFlow.value) {
-            is AddInterestScreenState.AddFirstKeywordStep -> currentState.onAddFirstKeywordStepContinue()
-            is AddInterestScreenState.AddAnotherKeywordStep -> TODO()
+            is AddInterestScreenState.AddFirstKeywordStep -> currentState.onContinueClicked()
+            is AddInterestScreenState.AddAnotherKeywordStep -> currentState.onContinueClicked()
             is AddInterestScreenState.AddInterestNameStep -> TODO()
         }.update(stateFlow)
     }
@@ -71,12 +72,20 @@ sealed class AddInterestScreenState(
         val interestName: String = "",
         val addedKeywords: List<String>,
         override val inputError: InputError? = null,
-    ) : AddInterestScreenState(inputError)
+    ) : AddInterestScreenState(inputError) {
+
+        val suggestedName = addedKeywords.first()
+
+    }
 }
 
 private fun AddInterestScreenState.AddAnotherKeywordStep.onSkipClicked(): AddInterestScreenState =
     AddInterestScreenState.AddInterestNameStep(addedKeywords = addedKeywords)
 
-private fun AddInterestScreenState.AddFirstKeywordStep.onAddFirstKeywordStepContinue(): AddInterestScreenState =
+private fun AddInterestScreenState.AddFirstKeywordStep.onContinueClicked(): AddInterestScreenState =
+    if (currentKeyword.isNotEmpty()) AddInterestScreenState.AddInterestNameStep(addedKeywords = listOf(currentKeyword))
+    else this.copy(inputError = InputError(ResString(R.string.error_interest_name_empty)))
+
+private fun AddInterestScreenState.AddAnotherKeywordStep.onContinueClicked(): AddInterestScreenState =
     if (currentKeyword.isNotEmpty()) AddInterestScreenState.AddInterestNameStep(addedKeywords = listOf(currentKeyword))
     else this.copy(inputError = InputError(ResString(R.string.error_interest_name_empty)))
