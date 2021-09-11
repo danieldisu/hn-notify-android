@@ -45,7 +45,7 @@ private fun NavGraphBuilder.setupRoute(
         }
         NavigationRouteAddress.AddInterest -> {
             composable(navigationRouteAddress.value) {
-                AddInterestScreen()
+                AddInterestScreen(getViewModel())
             }
         }
         NavigationRouteAddress.EditInterest -> {

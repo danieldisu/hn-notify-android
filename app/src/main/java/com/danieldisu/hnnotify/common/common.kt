@@ -55,3 +55,9 @@ fun VerticalSpacer(
 ) = Spacer(modifier = Modifier.height(size.dp))
 
 typealias ComposableUnit = @Composable () -> Unit
+
+typealias OnClicked = () -> Unit
+
+typealias OnSubmit = () -> Unit
+
+typealias OnTextChanged = (String) -> Unit
