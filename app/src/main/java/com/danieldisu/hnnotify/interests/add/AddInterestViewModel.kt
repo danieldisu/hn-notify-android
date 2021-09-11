@@ -43,6 +43,13 @@ class AddInterestViewModel : ViewModel() {
 
     }
 
+    fun onSkipClicked() =
+        when (val currentState = stateFlow.value) {
+            is AddInterestScreenState.AddFirstKeywordStep -> throw IllegalStateException()
+            is AddInterestScreenState.AddAnotherKeywordStep -> currentState.onSkipClicked()
+            is AddInterestScreenState.AddInterestNameStep -> throw IllegalStateException()
+        }.update(stateFlow)
+
 }
 
 sealed class AddInterestScreenState(
@@ -65,6 +72,9 @@ sealed class AddInterestScreenState(
         override val inputError: InputError? = null,
     ) : AddInterestScreenState(inputError)
 }
+
+private fun AddInterestScreenState.AddAnotherKeywordStep.onSkipClicked(): AddInterestScreenState =
+    AddInterestScreenState.AddInterestNameStep(addedKeywords = addedKeywords)
 
 private fun AddInterestScreenState.AddFirstKeywordStep.onAddFirstKeywordStepContinue(): AddInterestScreenState =
     if (currentKeyword.isNotEmpty()) AddInterestScreenState.AddInterestNameStep(addedKeywords = listOf(currentKeyword))

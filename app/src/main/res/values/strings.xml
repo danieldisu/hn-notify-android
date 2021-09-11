@@ -7,6 +7,9 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
+    <string name="action_continue">Continue</string>
+    <string name="action_skip">Skip</string>
+
     <!--  BottomBar -->
     <string name="bottom_bar_label_interests">Interests</string>
     <string name="bottom_bar_label_stories">Stories</string>
@@ -21,6 +24,8 @@
     <!--  Add interest  -->
     <string name="label_add_interest_help_text">Choose a keyword that represent your interest, i.e. Kotlin if you want
         to receive stories related to the Kotlin programming language</string>
+    <string name="label_add_another_interest_help_text">Add more keywords that may identify your interest</string>
     <string name="hint_add_interest_keyword">Keyword</string>
     <string name="error_interest_name_empty">Interest name should not be empty</string>
+    <string name="action_add_another_keyword">Add another</string>
 </resources>

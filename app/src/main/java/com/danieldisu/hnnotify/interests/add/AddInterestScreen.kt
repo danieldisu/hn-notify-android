@@ -40,36 +40,56 @@ fun AddInterestScreen(viewModel: AddInterestViewModel) {
 @Composable
 private fun AddInterestScaffold(state: AddInterestScreenState, viewModel: AddInterestViewModel) {
     when (state) {
-        is AddInterestScreenState.AddFirstKeywordStep -> AddKeywords(state.inputError, viewModel)
-        is AddInterestScreenState.AddAnotherKeywordStep -> TODO()
+        is AddInterestScreenState.AddFirstKeywordStep ->
+            AddKeywords(state.currentKeyword, state.inputError, firstKeyword = true, viewModel)
+        is AddInterestScreenState.AddAnotherKeywordStep ->
+            AddKeywords(state.currentKeyword, state.inputError, firstKeyword = false, viewModel)
         is AddInterestScreenState.AddInterestNameStep -> TODO()
     }
-
 }
 
 @Composable
-private fun AddKeywords(inputError: InputError?, viewModel: AddInterestViewModel) {
+private fun AddKeywords(
+    currentKeywordValue: String,
+    inputError: InputError?,
+    firstKeyword: Boolean,
+    viewModel: AddInterestViewModel
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(16.dp)
     ) {
-        KeywordForm(inputError, viewModel)
-        ButtonRow(viewModel)
+        KeywordForm(inputError, firstKeyword, viewModel)
+        ButtonRow(currentKeywordValue, viewModel)
     }
 }
 
 @Composable
-private fun BoxScope.ButtonRow(viewModel: AddInterestViewModel) {
+private fun BoxScope.ButtonRow(currentKeywordValue: String, viewModel: AddInterestViewModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
     ) {
-        AddAnotherButton(viewModel)
+        if (currentKeywordValue.isEmpty()) {
+            SkipButton(viewModel)
+        } else {
+            AddAnotherButton(viewModel)
+        }
         HorizontalSpacer(8)
         ContinueButton(viewModel)
+    }
+}
+
+@Composable
+fun RowScope.SkipButton(viewModel: AddInterestViewModel) {
+    Button(
+        modifier = Modifier.Companion.weight(1f),
+        onClick = viewModel::onSkipClicked
+    ) {
+        Text(text = stringResource(id = R.string.action_skip))
     }
 }
 
@@ -79,7 +99,7 @@ private fun RowScope.ContinueButton(viewModel: AddInterestViewModel) {
         modifier = Modifier.Companion.weight(1f),
         onClick = viewModel::onContinueClicked
     ) {
-        Text(text = "Continue")
+        Text(text = stringResource(id = R.string.action_continue))
     }
 }
 
@@ -89,14 +109,14 @@ private fun RowScope.AddAnotherButton(viewModel: AddInterestViewModel) {
         modifier = Modifier.Companion.weight(1f),
         onClick = viewModel::onAddMoreClicked
     ) {
-        Text(text = "Add another")
+        Text(text = stringResource(id = R.string.action_add_another_keyword))
     }
 }
 
 @Composable
-private fun KeywordForm(inputError: InputError?, viewModel: AddInterestViewModel) {
+private fun KeywordForm(inputError: InputError?, firstKeyword: Boolean, viewModel: AddInterestViewModel) {
     Column {
-        AddInterestKeywordHelpText()
+        AddInterestKeywordHelpText(firstKeyword)
         VerticalSpacer()
         KeywordTextInput(inputError, viewModel)
     }
@@ -132,11 +152,19 @@ private fun KeywordTextInput(inputError: InputError?, viewModel: AddInterestView
 }
 
 @Composable
-private fun AddInterestKeywordHelpText() {
-    Text(
-        text = stringResource(id = R.string.label_add_interest_help_text),
-        style = MaterialTheme.typography.h6
-    )
+private fun AddInterestKeywordHelpText(firstKeyword: Boolean) {
+    if (firstKeyword) {
+        Text(
+            text = stringResource(id = R.string.label_add_interest_help_text),
+            style = MaterialTheme.typography.h6
+        )
+    } else {
+        Text(
+            text = stringResource(id = R.string.label_add_another_interest_help_text),
+            style = MaterialTheme.typography.h6
+        )
+    }
+
 }
 
 @Preview(showBackground = true)
