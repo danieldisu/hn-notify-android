@@ -12,8 +12,8 @@ class InterestRepository(
     private val interestApi: InterestApi
 ) {
 
-    suspend fun saveInterest(interest: RecentlyCreatedKeywordInterest): InterestOrError {
-        return ApiResult.Success(Interest("3", interest.name ?: "", interest.keywords))
+    suspend fun saveInterest(userId: String, name: String, keywords: List<String>): ApiResult<Unit, ApiErrorDto> {
+        return interestApi.createInterest(userId, HttpInterest(name, keywords))
     }
 
     suspend fun getInterests(userId: String): ApiResult<List<Interest>, ApiErrorDto> =

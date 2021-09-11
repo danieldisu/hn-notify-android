@@ -13,7 +13,7 @@ object UiModule {
         viewModel { TopStoriesViewModel(get()) }
         viewModel { InterestsViewModel(get()) }
         viewModel { InterestDetailViewModel(it[0], get()) }
-        viewModel { AddInterestViewModel() }
+        viewModel { AddInterestViewModel(get()) }
     }
 
 }

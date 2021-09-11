@@ -1,27 +1,36 @@
 package com.danieldisu.hnnotify.interests.add
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.danieldisu.hnnotify.R
 import com.danieldisu.hnnotify.common.InputError
 import com.danieldisu.hnnotify.common.ResString
 import com.danieldisu.hnnotify.common.ScreenState
 import com.danieldisu.hnnotify.common.pop
 import com.danieldisu.hnnotify.common.update
+import com.danieldisu.hnnotify.data.interests.InterestRepository
 import com.danieldisu.hnnotify.interests.add.views.AddInterestNameViewEventListener
 import com.danieldisu.hnnotify.interests.add.views.AddKeywordEventListener
+import com.slack.eithernet.ApiResult
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 
-class AddInterestViewModel : ViewModel(), AddKeywordEventListener, AddInterestNameViewEventListener {
+class AddInterestViewModel(
+    private val interestRepository: InterestRepository,
+) : ViewModel(), AddKeywordEventListener, AddInterestNameViewEventListener {
 
     val stateFlow: MutableStateFlow<AddInterestScreenState> =
         MutableStateFlow(AddInterestScreenState.AddFirstKeywordStep())
 
-    init {
-
-    }
-
     override fun onCreateClicked() {
-
+        val currentState = stateFlow.value as AddInterestScreenState.AddInterestNameStep
+        if (currentState.interestName.isEmpty()) {
+            currentState.copy(inputError = InputError(ResString(R.string.error_interest_name_empty))).update(stateFlow)
+        } else {
+            // do the request
+            createInterest(currentState)
+        }
     }
 
     // Because all steps have an input value we can reuse this function, if this changes we should create a different
@@ -64,6 +73,17 @@ class AddInterestViewModel : ViewModel(), AddKeywordEventListener, AddInterestNa
             is AddInterestScreenState.AddInterestNameStep -> currentState.onBackPressed()
         }.update(stateFlow)
 
+    private fun createInterest(currentState: AddInterestScreenState.AddInterestNameStep) = viewModelScope.launch {
+        val result = interestRepository.saveInterest("1", currentState.interestName, currentState.addedKeywords)
+        when (result) {
+            is ApiResult.Success -> {
+                Log.d("AddInterest", "Success")
+            }
+            is ApiResult.Failure -> {
+                Log.d("AddInterest", "Failure")
+            }
+        }
+    }
 }
 
 sealed class AddInterestScreenState(
