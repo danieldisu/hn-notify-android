@@ -6,9 +6,10 @@ import com.danieldisu.hnnotify.common.InputError
 import com.danieldisu.hnnotify.common.ResString
 import com.danieldisu.hnnotify.common.ScreenState
 import com.danieldisu.hnnotify.common.update
+import com.danieldisu.hnnotify.interests.add.views.AddKeywordEventListener
 import kotlinx.coroutines.flow.MutableStateFlow
 
-class AddInterestViewModel : ViewModel() {
+class AddInterestViewModel : ViewModel(), AddKeywordEventListener {
 
     val stateFlow: MutableStateFlow<AddInterestScreenState> =
         MutableStateFlow(AddInterestScreenState.AddFirstKeywordStep())
@@ -19,7 +20,7 @@ class AddInterestViewModel : ViewModel() {
 
     // Because all steps have an input value we can reuse this function, if this changes we should create a different
     // function for each state
-    fun onCurrentInputValueChanged(value: String) {
+    override fun onCurrentInputValueChanged(value: String) {
         when (val currentState = stateFlow.value) {
             is AddInterestScreenState.AddFirstKeywordStep -> currentState.copy(currentKeyword = value)
             is AddInterestScreenState.AddAnotherKeywordStep -> currentState.copy(currentKeyword = value)
@@ -27,11 +28,11 @@ class AddInterestViewModel : ViewModel() {
         }.update(stateFlow)
     }
 
-    fun onKeyboardSubmit() {
+    override fun onKeyboardSubmit() {
 
     }
 
-    fun onContinueClicked() {
+    override fun onContinueClicked() {
         when (val currentState = stateFlow.value) {
             is AddInterestScreenState.AddFirstKeywordStep -> currentState.onAddFirstKeywordStepContinue()
             is AddInterestScreenState.AddAnotherKeywordStep -> TODO()
@@ -39,11 +40,11 @@ class AddInterestViewModel : ViewModel() {
         }.update(stateFlow)
     }
 
-    fun onAddMoreClicked() {
+    override fun onAddMoreClicked() {
 
     }
 
-    fun onSkipClicked() =
+    override fun onSkipClicked() =
         when (val currentState = stateFlow.value) {
             is AddInterestScreenState.AddFirstKeywordStep -> throw IllegalStateException()
             is AddInterestScreenState.AddAnotherKeywordStep -> currentState.onSkipClicked()
