@@ -16,7 +16,6 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,11 +23,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.danieldisu.hnnotify.R
 import com.danieldisu.hnnotify.common.VerticalSpacer
+import com.danieldisu.hnnotify.common.rememberTextValue
 
 interface AddInterestNameViewEventListener {
     fun onCreateClicked()
@@ -36,41 +35,37 @@ interface AddInterestNameViewEventListener {
 }
 
 @Composable
-fun ChooseInterestNameView(suggestedInterestName: String, eventListener: AddInterestNameViewEventListener) {
+fun ChooseInterestNameView(interestName: String, eventListener: AddInterestNameViewEventListener) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(16.dp)
     ) {
-        KeywordForm(suggestedInterestName, eventListener)
+        KeywordForm(interestName, eventListener)
         ButtonRow(eventListener)
     }
 }
 
 @Composable
-private fun KeywordForm(suggestedInterestName: String, eventListener: AddInterestNameViewEventListener) {
+private fun KeywordForm(interestName: String, eventListener: AddInterestNameViewEventListener) {
     Column {
         AddInterestNameHelpText()
         VerticalSpacer()
-        NameTextInput(suggestedInterestName, eventListener)
+        NameTextInput(interestName, eventListener)
     }
 }
 
 @Composable
-private fun NameTextInput(suggestedInterestName: String, eventListener: AddInterestNameViewEventListener) {
-    val (textState, updateTextState) = remember { mutableStateOf(TextFieldValue(suggestedInterestName)) }
+private fun NameTextInput(interestName: String, eventListener: AddInterestNameViewEventListener) {
+    val (textState, updateTextState) = rememberTextValue(interestName)
     val focusRequester = remember { FocusRequester() }
 
     OutlinedTextField(
         value = textState,
         label = { Text(stringResource(id = R.string.hint_add_interest_name)) },
         onValueChange = {
-            if (it.text.isEmpty()) {
-                updateTextState(it.copy(text = suggestedInterestName))
-            } else {
-                updateTextState(it)
-            }
+            updateTextState(it)
             eventListener.onCurrentInputValueChanged(it.text)
         },
         modifier = Modifier
@@ -119,7 +114,7 @@ private fun AddInterestNameHelpText() {
 private fun ChooseInterestNamePreview() {
     MaterialTheme {
         ChooseInterestNameView(
-            suggestedInterestName = "Kotlin",
+            interestName = "Kotlin",
             eventListener = emptyListener()
         )
     }

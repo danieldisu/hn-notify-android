@@ -25,7 +25,7 @@ private fun AddInterestScaffold(state: AddInterestScreenState, viewModel: AddInt
         is AddInterestScreenState.AddAnotherKeywordStep ->
             AddKeywordView(state.currentKeyword, state.inputError, firstKeyword = false, viewModel)
         is AddInterestScreenState.AddInterestNameStep ->
-            ChooseInterestNameView(state.suggestedName, viewModel)
+            ChooseInterestNameView(state.interestName, viewModel)
     }
 }
 

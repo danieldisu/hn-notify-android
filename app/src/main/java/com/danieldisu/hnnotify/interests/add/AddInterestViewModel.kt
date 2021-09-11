@@ -85,12 +85,10 @@ sealed class AddInterestScreenState(
     ) : AddInterestScreenState(inputError)
 
     data class AddInterestNameStep(
-        val interestName: String = "",
         val addedKeywords: List<String>,
+        val interestName: String = addedKeywords.first(),
         override val inputError: InputError? = null,
-    ) : AddInterestScreenState(inputError) {
-        val suggestedName = addedKeywords.first()
-    }
+    ) : AddInterestScreenState(inputError)
 }
 
 private fun AddInterestScreenState.AddAnotherKeywordStep.onSkipClicked(): AddInterestScreenState =
