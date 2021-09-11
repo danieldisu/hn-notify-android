@@ -1,6 +1,6 @@
 buildscript {
-  ext.kotlin_version = "1.5.21"
-  ext.compose_version = '1.0.1'
+  ext.kotlin_version = "1.5.30"
+  ext.compose_version = '1.1.0-alpha03'
   ext.coroutines_version = '1.5.1'
   ext.accompanist_version = '0.17.0'
 
@@ -9,7 +9,7 @@ buildscript {
     mavenCentral()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:7.1.0-alpha08'
+    classpath 'com.android.tools.build:gradle:7.1.0-alpha11'
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     classpath "org.jetbrains.kotlin:kotlin-serialization:$kotlin_version"
   }
@@ -23,14 +23,19 @@ allprojects {
 
   tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
     kotlinOptions {
-      freeCompilerArgs += '-Xopt-in=kotlin.RequiresOptIn'
-      freeCompilerArgs += '-Xopt-in=kotlin.Experimental'
-      freeCompilerArgs += "-XXLanguage:+InlineClasses"
-      freeCompilerArgs += "-Xuse-experimental=kotlin.Experimental"
-      freeCompilerArgs += "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi"
-      freeCompilerArgs += "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi"
-      freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
-      freeCompilerArgs += "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi"
+      freeCompilerArgs += [
+          "-Xopt-in=kotlin.RequiresOptIn",
+          "-Xopt-in=kotlin.Experimental",
+          "-XXLanguage:+InlineClasses",
+          "-Xuse-experimental=kotlin.Experimental",
+          "-Xuse-experimental=androidx.compose.ui.ExperimentalComposeUiApi",
+          "-Xuse-experimental=androidx.compose.animation.ExperimentalAnimationApi",
+          "-Xuse-experimental=com.google.accompanist.navigation.material.ExperimentalMaterialNavigationApi",
+          "-Xuse-experimental=androidx.compose.material.ExperimentalMaterialApi",
+          "-Xuse-experimental=kotlinx.serialization.ExperimentalSerializationApi",
+          "-Xuse-experimental=kotlinx.coroutines.FlowPreview",
+          "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+      ]
 
       // Set JVM target to 1.8
       jvmTarget = "1.8"
