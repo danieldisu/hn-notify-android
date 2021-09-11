@@ -55,18 +55,22 @@ internal fun AddKeywordView(
             .padding(16.dp)
     ) {
         KeywordForm(inputError, firstKeyword, eventListener)
-        ButtonRow(currentKeywordValue, eventListener)
+        ButtonRow(currentKeywordValue, firstKeyword, eventListener)
     }
 }
 
 @Composable
-private fun BoxScope.ButtonRow(currentKeywordValue: String, eventListener: AddKeywordEventListener) {
+private fun BoxScope.ButtonRow(
+    currentKeywordValue: String,
+    firstKeyword: Boolean,
+    eventListener: AddKeywordEventListener
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .align(Alignment.BottomCenter)
     ) {
-        if (currentKeywordValue.isEmpty()) {
+        if (!firstKeyword && currentKeywordValue.isEmpty()) {
             SkipButton(eventListener)
         } else {
             AddAnotherButton(eventListener)

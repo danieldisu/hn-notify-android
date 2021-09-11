@@ -29,6 +29,7 @@
     <string name="hint_add_interest_keyword">Keyword</string>
     <string name="hint_add_interest_name">Interest name</string>
     <string name="error_interest_name_empty">Interest name should not be empty</string>
+    <string name="error_keyword_name_empty">The keyword should not be empty</string>
     <string name="action_add_another_keyword">Add another</string>
     <string name="action_create_interest">Create interest</string>
 </resources>
