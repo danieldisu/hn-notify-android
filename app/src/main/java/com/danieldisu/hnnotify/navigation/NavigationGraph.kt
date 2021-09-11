@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.danieldisu.hnnotify.interests.InterestDetailScreen
 import com.danieldisu.hnnotify.interests.InterestsScreen
+import com.danieldisu.hnnotify.interests.add.AddInterestScreen
 import com.danieldisu.hnnotify.stories.TopStoriesScreen
 import org.koin.androidx.compose.getViewModel
 import org.koin.core.parameter.parametersOf
@@ -32,7 +33,7 @@ fun NavigationGraph(navController: NavController) {
                 }
                 NavigationRouteAddress.AddInterest -> {
                     composable(navigationRouteAddress.value) {
-                        InterestDetailScreen(viewModel = getViewModel(parameters = { parametersOf(null) }))
+                        AddInterestScreen()
                     }
                 }
                 NavigationRouteAddress.EditInterest -> {

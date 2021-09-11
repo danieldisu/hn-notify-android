@@ -16,4 +16,10 @@
     <string name="label_empty_stories">No stories that matches your interests have been found</string>
     <string name="label_today">Today</string>
     <string name="label_yesterday">Yesterday</string>
+
+
+    <!--  Add interest  -->
+    <string name="label_add_interest_help_text">Choose a keyword that represent your interest, i.e. Kotlin if you want
+        to receive stories related to the Kotlin programming language</string>
+    <string name="hint_add_interest_keyword">Keyword</string>
 </resources>
