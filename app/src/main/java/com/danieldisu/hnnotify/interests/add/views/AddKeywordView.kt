@@ -16,7 +16,6 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,7 +23,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.danieldisu.hnnotify.R
@@ -33,6 +31,7 @@ import com.danieldisu.hnnotify.common.InputError
 import com.danieldisu.hnnotify.common.RawString
 import com.danieldisu.hnnotify.common.VerticalSpacer
 import com.danieldisu.hnnotify.common.asString
+import com.danieldisu.hnnotify.common.rememberTextValue
 
 interface AddKeywordEventListener {
     fun onSkipClicked()
@@ -54,7 +53,7 @@ internal fun AddKeywordView(
             .fillMaxHeight()
             .padding(16.dp)
     ) {
-        KeywordForm(inputError, firstKeyword, eventListener)
+        KeywordForm(currentKeywordValue, inputError, firstKeyword, eventListener)
         ButtonRow(currentKeywordValue, firstKeyword, eventListener)
     }
 }
@@ -111,17 +110,27 @@ private fun RowScope.AddAnotherButton(eventListener: AddKeywordEventListener) {
 }
 
 @Composable
-private fun KeywordForm(inputError: InputError?, firstKeyword: Boolean, eventListener: AddKeywordEventListener) {
+private fun KeywordForm(
+    currentKeywordValue: String,
+    inputError: InputError?,
+    firstKeyword: Boolean,
+    eventListener: AddKeywordEventListener
+) {
     Column {
         AddInterestKeywordHelpText(firstKeyword)
         VerticalSpacer()
-        KeywordTextInput(inputError, eventListener)
+        KeywordTextInput(currentKeywordValue, inputError, eventListener)
     }
 }
 
 @Composable
-private fun KeywordTextInput(inputError: InputError?, eventListener: AddKeywordEventListener) {
-    val (textState, updateTextState) = remember { mutableStateOf(TextFieldValue()) }
+private fun KeywordTextInput(
+    currentKeywordValue: String,
+    inputError: InputError?,
+    eventListener: AddKeywordEventListener
+) {
+    val (textState, updateTextState) = rememberTextValue(currentKeywordValue)
+
     val focusRequester = remember { FocusRequester() }
 
     OutlinedTextField(

@@ -53,12 +53,12 @@ private fun KeywordForm(suggestedInterestName: String, eventListener: AddInteres
     Column {
         AddInterestNameHelpText()
         VerticalSpacer()
-        KeywordTextInput(suggestedInterestName, eventListener)
+        NameTextInput(suggestedInterestName, eventListener)
     }
 }
 
 @Composable
-private fun KeywordTextInput(suggestedInterestName: String, eventListener: AddInterestNameViewEventListener) {
+private fun NameTextInput(suggestedInterestName: String, eventListener: AddInterestNameViewEventListener) {
     val (textState, updateTextState) = remember { mutableStateOf(TextFieldValue(suggestedInterestName)) }
     val focusRequester = remember { FocusRequester() }
 
