@@ -15,10 +15,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -115,6 +118,7 @@ private fun KeywordForm(inputError: InputError?, firstKeyword: Boolean, eventLis
 @Composable
 private fun KeywordTextInput(inputError: InputError?, eventListener: AddKeywordEventListener) {
     val (textState, updateTextState) = remember { mutableStateOf(TextFieldValue()) }
+    val focusRequester = remember { FocusRequester() }
 
     OutlinedTextField(
         value = textState,
@@ -123,7 +127,9 @@ private fun KeywordTextInput(inputError: InputError?, eventListener: AddKeywordE
             updateTextState(it)
             eventListener.onCurrentInputValueChanged(it.text)
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
         isError = inputError != null,
         keyboardActions = KeyboardActions { eventListener.onContinueClicked() },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
@@ -135,6 +141,10 @@ private fun KeywordTextInput(inputError: InputError?, eventListener: AddKeywordE
             style = MaterialTheme.typography.caption,
             modifier = Modifier.padding(start = 16.dp)
         )
+    }
+
+    SideEffect {
+        focusRequester.requestFocus()
     }
 }
 

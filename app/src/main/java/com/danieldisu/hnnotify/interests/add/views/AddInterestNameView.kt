@@ -15,10 +15,13 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
@@ -56,6 +59,7 @@ private fun KeywordForm(suggestedInterestName: String, eventListener: AddInteres
 @Composable
 private fun KeywordTextInput(suggestedInterestName: String, eventListener: AddInterestNameViewEventListener) {
     val (textState, updateTextState) = remember { mutableStateOf(TextFieldValue(suggestedInterestName)) }
+    val focusRequester = remember { FocusRequester() }
 
     OutlinedTextField(
         value = textState,
@@ -68,10 +72,16 @@ private fun KeywordTextInput(suggestedInterestName: String, eventListener: AddIn
             }
             eventListener.onCurrentInputValueChanged(it.text)
         },
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .focusRequester(focusRequester),
         keyboardActions = KeyboardActions { eventListener.onCreateClicked() },
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Send),
     )
+
+    SideEffect {
+        focusRequester.requestFocus()
+    }
 }
 
 @Composable
