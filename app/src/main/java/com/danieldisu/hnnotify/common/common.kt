@@ -61,3 +61,5 @@ typealias OnClicked = () -> Unit
 typealias OnSubmit = () -> Unit
 
 typealias OnTextChanged = (String) -> Unit
+
+data class InputError(val message: TextValue)

@@ -26,7 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.danieldisu.hnnotify.R
 import com.danieldisu.hnnotify.common.HorizontalSpacer
+import com.danieldisu.hnnotify.common.InputError
 import com.danieldisu.hnnotify.common.VerticalSpacer
+import com.danieldisu.hnnotify.common.asString
 
 @Composable
 fun AddInterestScreen(viewModel: AddInterestViewModel) {
@@ -38,7 +40,7 @@ fun AddInterestScreen(viewModel: AddInterestViewModel) {
 @Composable
 private fun AddInterestScaffold(state: AddInterestScreenState, viewModel: AddInterestViewModel) {
     when (state) {
-        is AddInterestScreenState.AddFirstKeywordStep -> AddKeywords(viewModel)
+        is AddInterestScreenState.AddFirstKeywordStep -> AddKeywords(state.inputError, viewModel)
         is AddInterestScreenState.AddAnotherKeywordStep -> TODO()
         is AddInterestScreenState.AddInterestNameStep -> TODO()
     }
@@ -46,14 +48,14 @@ private fun AddInterestScaffold(state: AddInterestScreenState, viewModel: AddInt
 }
 
 @Composable
-private fun AddKeywords(viewModel: AddInterestViewModel) {
+private fun AddKeywords(inputError: InputError?, viewModel: AddInterestViewModel) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(16.dp)
     ) {
-        AddKeywordForm(viewModel)
+        KeywordForm(inputError, viewModel)
         ButtonRow(viewModel)
     }
 }
@@ -92,16 +94,16 @@ private fun RowScope.AddAnotherButton(viewModel: AddInterestViewModel) {
 }
 
 @Composable
-private fun AddKeywordForm(viewModel: AddInterestViewModel) {
+private fun KeywordForm(inputError: InputError?, viewModel: AddInterestViewModel) {
     Column {
         AddInterestKeywordHelpText()
         VerticalSpacer()
-        KeywordTextInput(viewModel)
+        KeywordTextInput(inputError, viewModel)
     }
 }
 
 @Composable
-private fun KeywordTextInput(viewModel: AddInterestViewModel) {
+private fun KeywordTextInput(inputError: InputError?, viewModel: AddInterestViewModel) {
     val (textState, updateTextState) = remember { mutableStateOf(TextFieldValue()) }
 
     OutlinedTextField(
@@ -116,8 +118,17 @@ private fun KeywordTextInput(viewModel: AddInterestViewModel) {
             .onKeyEvent {
                 viewModel.onKeyboardSubmit()
                 true
-            }
+            },
+        isError = inputError != null
     )
+    if (inputError != null) {
+        Text(
+            text = inputError.message.asString(),
+            color = MaterialTheme.colors.error,
+            style = MaterialTheme.typography.caption,
+            modifier = Modifier.padding(start = 16.dp)
+        )
+    }
 }
 
 @Composable

@@ -22,4 +22,5 @@
     <string name="label_add_interest_help_text">Choose a keyword that represent your interest, i.e. Kotlin if you want
         to receive stories related to the Kotlin programming language</string>
     <string name="hint_add_interest_keyword">Keyword</string>
+    <string name="error_interest_name_empty">Interest name should not be empty</string>
 </resources>
