@@ -25,6 +25,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.danieldisu.hnnotify.R
 import com.danieldisu.hnnotify.common.VerticalSpacer
@@ -35,7 +36,7 @@ interface AddInterestNameViewEventListener {
 }
 
 @Composable
-fun AddInterestNameView(suggestedInterestName: String, eventListener: AddInterestNameViewEventListener) {
+fun ChooseInterestNameView(suggestedInterestName: String, eventListener: AddInterestNameViewEventListener) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -111,4 +112,23 @@ private fun AddInterestNameHelpText() {
         text = stringResource(id = R.string.label_name_your_interest),
         style = MaterialTheme.typography.h6
     )
+}
+
+@Preview(name = "Adding ", showBackground = true)
+@Composable
+private fun ChooseInterestNamePreview() {
+    MaterialTheme {
+        ChooseInterestNameView(
+            suggestedInterestName = "Kotlin",
+            eventListener = emptyListener()
+        )
+    }
+}
+
+private fun emptyListener() = object : AddInterestNameViewEventListener {
+    override fun onCreateClicked() {
+    }
+
+    override fun onCurrentInputValueChanged(value: String) {
+    }
 }

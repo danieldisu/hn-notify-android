@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.tooling.preview.Preview
-import com.danieldisu.hnnotify.interests.add.views.AddInterestNameView
+import com.danieldisu.hnnotify.interests.add.views.ChooseInterestNameView
 import com.danieldisu.hnnotify.interests.add.views.AddKeywordView
 
 @Composable
@@ -23,7 +23,7 @@ private fun AddInterestScaffold(state: AddInterestScreenState, viewModel: AddInt
         is AddInterestScreenState.AddAnotherKeywordStep ->
             AddKeywordView(state.currentKeyword, state.inputError, firstKeyword = false, viewModel)
         is AddInterestScreenState.AddInterestNameStep ->
-            AddInterestNameView(state.suggestedName, viewModel)
+            ChooseInterestNameView(state.suggestedName, viewModel)
     }
 }
 
