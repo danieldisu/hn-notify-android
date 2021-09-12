@@ -3,12 +3,15 @@ package com.danieldisu.hnnotify.interests.add
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.danieldisu.hnnotify.R
 import com.danieldisu.hnnotify.common.InputError
 import com.danieldisu.hnnotify.common.ResString
 import com.danieldisu.hnnotify.common.ScreenState
 import com.danieldisu.hnnotify.common.pop
 import com.danieldisu.hnnotify.common.update
+import com.danieldisu.hnnotify.data.core.ApiError
+import com.danieldisu.hnnotify.data.core.getError
 import com.danieldisu.hnnotify.data.interests.InterestRepository
 import com.danieldisu.hnnotify.interests.add.views.AddInterestNameViewEventListener
 import com.danieldisu.hnnotify.interests.add.views.AddKeywordEventListener
@@ -18,71 +21,90 @@ import kotlinx.coroutines.launch
 
 class AddInterestViewModel(
     private val interestRepository: InterestRepository,
+    private val navController: NavController,
 ) : ViewModel(), AddKeywordEventListener, AddInterestNameViewEventListener {
 
     val stateFlow: MutableStateFlow<AddInterestScreenState> =
         MutableStateFlow(AddInterestScreenState.AddFirstKeywordStep())
 
+    val currentState: AddInterestScreenState
+        get() = stateFlow.value
+
     override fun onCreateClicked() {
-        val currentState = stateFlow.value as AddInterestScreenState.AddInterestNameStep
-        if (currentState.interestName.isEmpty()) {
-            currentState.copy(inputError = InputError(ResString(R.string.error_interest_name_empty))).update(stateFlow)
+        val state = currentState as AddInterestScreenState.AddInterestNameStep
+        if (state.interestName.isEmpty()) {
+            state.copy(inputError = InputError(ResString(R.string.error_interest_name_empty))).update(stateFlow)
         } else {
-            // do the request
-            createInterest(currentState)
+            state.copy(creatingInterest = true).update(stateFlow)
+            createInterest(state)
         }
     }
 
     // Because all steps have an input value we can reuse this function, if this changes we should create a different
     // function for each state
     override fun onCurrentInputValueChanged(value: String) {
-        when (val currentState = stateFlow.value) {
-            is AddInterestScreenState.AddFirstKeywordStep -> currentState.copy(currentKeyword = value)
-            is AddInterestScreenState.AddAnotherKeywordStep -> currentState.copy(currentKeyword = value)
-            is AddInterestScreenState.AddInterestNameStep -> currentState.copy(interestName = value)
+        when (val state = stateFlow.value) {
+            is AddInterestScreenState.AddFirstKeywordStep -> state.copy(currentKeyword = value)
+            is AddInterestScreenState.AddAnotherKeywordStep -> state.copy(currentKeyword = value)
+            is AddInterestScreenState.AddInterestNameStep -> state.copy(interestName = value)
         }.update(stateFlow)
     }
 
     override fun onContinueClicked() {
-        when (val currentState = stateFlow.value) {
-            is AddInterestScreenState.AddFirstKeywordStep -> currentState.onContinueClicked()
-            is AddInterestScreenState.AddAnotherKeywordStep -> currentState.onContinueClicked()
+        when (val state = stateFlow.value) {
+            is AddInterestScreenState.AddFirstKeywordStep -> state.onContinueClicked()
+            is AddInterestScreenState.AddAnotherKeywordStep -> state.onContinueClicked()
             is AddInterestScreenState.AddInterestNameStep -> throw IllegalStateException()
         }.update(stateFlow)
     }
 
     override fun onAddMoreClicked() {
-        when (val currentState = stateFlow.value) {
-            is AddInterestScreenState.AddFirstKeywordStep -> currentState.onAddAnotherKeywordClicked()
-            is AddInterestScreenState.AddAnotherKeywordStep -> currentState.onAddAnotherKeywordClicked()
+        when (val state = stateFlow.value) {
+            is AddInterestScreenState.AddFirstKeywordStep -> state.onAddAnotherKeywordClicked()
+            is AddInterestScreenState.AddAnotherKeywordStep -> state.onAddAnotherKeywordClicked()
             is AddInterestScreenState.AddInterestNameStep -> throw IllegalStateException()
         }.update(stateFlow)
     }
 
     override fun onSkipClicked() =
-        when (val currentState = stateFlow.value) {
+        when (val state = stateFlow.value) {
             is AddInterestScreenState.AddFirstKeywordStep -> throw IllegalStateException()
-            is AddInterestScreenState.AddAnotherKeywordStep -> currentState.onSkipClicked()
+            is AddInterestScreenState.AddAnotherKeywordStep -> state.onSkipClicked()
             is AddInterestScreenState.AddInterestNameStep -> throw IllegalStateException()
         }.update(stateFlow)
 
     fun onBackPressed() =
-        when (val currentState = stateFlow.value) {
+        when (val state = stateFlow.value) {
             is AddInterestScreenState.AddFirstKeywordStep -> throw IllegalStateException()
-            is AddInterestScreenState.AddAnotherKeywordStep -> currentState.onBackPressed()
-            is AddInterestScreenState.AddInterestNameStep -> currentState.onBackPressed()
+            is AddInterestScreenState.AddAnotherKeywordStep -> state.onBackPressed()
+            is AddInterestScreenState.AddInterestNameStep -> state.onBackPressed()
         }.update(stateFlow)
 
-    private fun createInterest(currentState: AddInterestScreenState.AddInterestNameStep) = viewModelScope.launch {
-        val result = interestRepository.saveInterest("1", currentState.interestName, currentState.addedKeywords)
-        when (result) {
-            is ApiResult.Success -> {
-                Log.d("AddInterest", "Success")
+    fun onRetryClicked() {
+        when (val state = stateFlow.value) {
+            is AddInterestScreenState.AddInterestNameStep -> {
+                state.copy(errorCreatingInterest = false).update(stateFlow)
+                onCreateClicked()
             }
-            is ApiResult.Failure -> {
-                Log.d("AddInterest", "Failure")
-            }
+            else -> throw IllegalStateException()
         }
+    }
+
+    private fun createInterest(state: AddInterestScreenState.AddInterestNameStep) = viewModelScope.launch {
+        val result = interestRepository.saveInterest("1", state.interestName, state.addedKeywords)
+        when (result) {
+            is ApiResult.Success -> onInterestCreatedSuccessfully()
+            is ApiResult.Failure -> onInterestCreatingError(state, result.getError())
+        }
+    }
+
+    private fun onInterestCreatingError(state: AddInterestScreenState.AddInterestNameStep, error: ApiError) {
+        Log.e(this::class.simpleName, "Error creating interest", error.cause)
+        state.copy(creatingInterest = false, errorCreatingInterest = true).update(stateFlow)
+    }
+
+    private fun onInterestCreatedSuccessfully() {
+        navController.popBackStack()
     }
 }
 
@@ -92,6 +114,12 @@ sealed class AddInterestScreenState(
 
     val shouldHandleBackButton: Boolean
         get() = this !is AddFirstKeywordStep
+
+    val isLoading: Boolean
+        get() = (this is AddInterestNameStep && this.creatingInterest)
+
+    val isError: Boolean
+        get() = (this is AddInterestNameStep && this.errorCreatingInterest)
 
     data class AddFirstKeywordStep(
         val currentKeyword: String = "",
@@ -107,6 +135,8 @@ sealed class AddInterestScreenState(
     data class AddInterestNameStep(
         val addedKeywords: List<String>,
         val interestName: String = addedKeywords.first(),
+        val creatingInterest: Boolean = false,
+        val errorCreatingInterest: Boolean = false,
         override val inputError: InputError? = null,
     ) : AddInterestScreenState(inputError)
 }

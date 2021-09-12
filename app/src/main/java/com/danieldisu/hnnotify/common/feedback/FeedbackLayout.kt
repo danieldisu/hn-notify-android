@@ -49,12 +49,58 @@ fun FeedbackLayout(
     onRetryClicked: () -> Unit = {},
     content: @Composable BoxScope.() -> Unit
 ) {
-    val state = when {
-        isEmpty -> FeedbackLayoutState.Empty()
-        isError -> FeedbackLayoutState.Error()
-        isLoading -> FeedbackLayoutState.Loading()
-        else -> FeedbackLayoutState.Success
-    }
+    val state =
+        when {
+            isEmpty -> FeedbackLayoutState.Empty()
+            isError -> FeedbackLayoutState.Error()
+            isLoading -> FeedbackLayoutState.Loading()
+            else -> FeedbackLayoutState.Success
+        }
+
+
+    FeedbackLayoutInternal(content, state, onRetryClicked)
+}
+
+@Composable
+fun FeedbackLayout(
+    isError: Boolean = false,
+    isLoading: Boolean = false,
+    isEmpty: Boolean = false,
+    showContent: Boolean = false,
+    onRetryClicked: () -> Unit = {},
+    content: @Composable BoxScope.() -> Unit
+) {
+    val state =
+        when {
+            isEmpty -> FeedbackLayoutState.Empty(shouldShowContent = showContent)
+            isError -> FeedbackLayoutState.Error(shouldShowContent = showContent)
+            isLoading -> FeedbackLayoutState.Loading(shouldShowContent = showContent)
+            else -> FeedbackLayoutState.Success
+        }
+
+
+    FeedbackLayoutInternal(content, state, onRetryClicked)
+}
+
+@Composable
+fun FeedbackLayout(
+    isError: Boolean = false,
+    isLoading: Boolean = false,
+    isEmpty: Boolean = false,
+    showTransparentLayer: Boolean = false,
+    showContent: Boolean = false,
+    onRetryClicked: () -> Unit = {},
+    content: @Composable BoxScope.() -> Unit
+) {
+    val state =
+        when {
+            isEmpty -> FeedbackLayoutState.Empty(shouldShowContent = showContent, showTransparentLayer = showTransparentLayer)
+            isError -> FeedbackLayoutState.Error(shouldShowContent = showContent, showTransparentLayer = showTransparentLayer)
+            isLoading -> FeedbackLayoutState.Loading(shouldShowContent = showContent, showTransparentLayer = showTransparentLayer)
+            else -> FeedbackLayoutState.Success
+        }
+
+
     FeedbackLayoutInternal(content, state, onRetryClicked)
 }
 
@@ -200,19 +246,21 @@ sealed class FeedbackLayoutState(
         val message: TextValue = ResString(R.string.label_loading),
         val showTransparentLayer: Boolean = false,
         val shouldShowContent: Boolean = false,
-    ) : FeedbackLayoutState(transparentLayer = showTransparentLayer, showContent = shouldShowContent)
+    ) : FeedbackLayoutState(showContent = shouldShowContent, transparentLayer = showTransparentLayer)
 
     data class Error(
         val message: TextValue = ResString(R.string.label_error),
         val shouldShowContent: Boolean = false,
-    ) : FeedbackLayoutState(showContent = shouldShowContent)
+        val showTransparentLayer: Boolean = false,
+    ) : FeedbackLayoutState(showContent = shouldShowContent, transparentLayer = showTransparentLayer)
 
     data class Empty(
         val message: TextValue = ResString(R.string.label_empty),
         val shouldShowContent: Boolean = false,
-    ) : FeedbackLayoutState(showContent = shouldShowContent)
+        val showTransparentLayer: Boolean = false,
+    ) : FeedbackLayoutState(showContent = shouldShowContent, transparentLayer = showTransparentLayer)
 
-    object Success : FeedbackLayoutState(showContent = true)
+    object Success : FeedbackLayoutState(showContent = true, transparentLayer = false)
 }
 
 @Preview(showBackground = true)
