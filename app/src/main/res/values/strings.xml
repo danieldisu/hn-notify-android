@@ -26,6 +26,7 @@
         to receive stories related to the Kotlin programming language</string>
     <string name="label_add_another_keyword_help_text">Add more keywords that may identify your interest</string>
     <string name="label_name_your_interest">How would you call this interest?</string>
+    <string name="label_keywords_for_interest_about_to_create">These are the keywords for the interest you are about to create:</string>
     <string name="hint_add_interest_keyword">Keyword</string>
     <string name="hint_add_interest_name">Interest name</string>
     <string name="error_interest_name_empty">Interest name should not be empty</string>

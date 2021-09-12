@@ -8,8 +8,10 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.OutlinedTextField
@@ -35,24 +37,26 @@ interface AddInterestNameViewEventListener {
 }
 
 @Composable
-fun ChooseInterestNameView(interestName: String, eventListener: AddInterestNameViewEventListener) {
+fun ChooseInterestNameView(interestName: String, keywords: List<String>, eventListener: AddInterestNameViewEventListener) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .fillMaxHeight()
             .padding(16.dp)
     ) {
-        KeywordForm(interestName, eventListener)
+        InterestNameForm(interestName, keywords, eventListener)
         ButtonRow(eventListener)
     }
 }
 
 @Composable
-private fun KeywordForm(interestName: String, eventListener: AddInterestNameViewEventListener) {
+private fun InterestNameForm(interestName: String, keywords: List<String>, eventListener: AddInterestNameViewEventListener) {
     Column {
         AddInterestNameHelpText()
         VerticalSpacer()
         NameTextInput(interestName, eventListener)
+        VerticalSpacer()
+        KeywordList(keywords)
     }
 }
 
@@ -109,12 +113,31 @@ private fun AddInterestNameHelpText() {
     )
 }
 
-@Preview(name = "Adding ", showBackground = true)
+@Composable
+private fun KeywordList(keywords: List<String>) {
+    Text(text = stringResource(id = R.string.label_keywords_for_interest_about_to_create))
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        keywords.forEach { keyword ->
+            Text(text = buildString {
+                append("- ")
+                append(keyword)
+            })
+        }
+    }
+}
+
+@Preview(showBackground = true)
 @Composable
 private fun ChooseInterestNamePreview() {
     MaterialTheme {
         ChooseInterestNameView(
             interestName = "Kotlin",
+            keywords = listOf("Kotlin", "JVM"),
             eventListener = emptyListener()
         )
     }

@@ -36,11 +36,24 @@ private fun AddInterestScaffold(state: AddInterestScreenState, viewModel: AddInt
 
         when (state) {
             is AddInterestScreenState.AddFirstKeywordStep ->
-                AddKeywordView(state.currentKeyword, state.inputError, firstKeyword = true, viewModel)
+                AddKeywordView(
+                    currentKeywordValue = state.currentKeyword,
+                    inputError = state.inputError,
+                    firstKeyword = true,
+                    eventListener = viewModel
+                )
             is AddInterestScreenState.AddAnotherKeywordStep ->
-                AddKeywordView(state.currentKeyword, state.inputError, firstKeyword = false, viewModel)
+                AddKeywordView(
+                    currentKeywordValue = state.currentKeyword,
+                    inputError = state.inputError, firstKeyword = false,
+                    eventListener = viewModel
+                )
             is AddInterestScreenState.AddInterestNameStep ->
-                ChooseInterestNameView(state.interestName, viewModel)
+                ChooseInterestNameView(
+                    interestName = state.interestName,
+                    keywords = state.addedKeywords,
+                    eventListener = viewModel
+                )
         }
     }
 }
