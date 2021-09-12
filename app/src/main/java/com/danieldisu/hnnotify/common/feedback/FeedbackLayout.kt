@@ -193,8 +193,10 @@ private fun BoxScope.EmptyLayout(message: TextValue, onRetryClicked: () -> Unit)
 sealed class FeedbackLayoutState(
     val transparentLayer: Boolean = false
 ) {
-    data class Loading(val message: TextValue = ResString(R.string.label_loading)) :
-        FeedbackLayoutState(transparentLayer = true)
+    data class Loading(
+        val message: TextValue = ResString(R.string.label_loading),
+        val showTransparentLayer: Boolean = false,
+    ) : FeedbackLayoutState(transparentLayer = showTransparentLayer)
 
     data class Error(val message: TextValue = ResString(R.string.label_error)) : FeedbackLayoutState()
 
