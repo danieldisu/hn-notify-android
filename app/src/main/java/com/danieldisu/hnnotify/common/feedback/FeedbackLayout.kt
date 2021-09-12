@@ -35,10 +35,35 @@ import com.danieldisu.hnnotify.common.noContent
 @Composable
 fun FeedbackLayout(
     state: FeedbackLayoutState,
-    onRetryClicked: () -> Unit,
+    onRetryClicked: () -> Unit = {},
     content: @Composable BoxScope.() -> Unit
 ) {
+    FeedbackLayoutInternal(content, state, onRetryClicked)
+}
 
+@Composable
+fun FeedbackLayout(
+    isError: Boolean = false,
+    isLoading: Boolean = false,
+    isEmpty: Boolean = false,
+    onRetryClicked: () -> Unit = {},
+    content: @Composable BoxScope.() -> Unit
+) {
+    val state = when {
+        isEmpty -> FeedbackLayoutState.Empty()
+        isError -> FeedbackLayoutState.Error()
+        isLoading -> FeedbackLayoutState.Loading()
+        else -> FeedbackLayoutState.Success
+    }
+    FeedbackLayoutInternal(content, state, onRetryClicked)
+}
+
+@Composable
+private fun FeedbackLayoutInternal(
+    content: @Composable() (BoxScope.() -> Unit),
+    state: FeedbackLayoutState,
+    onRetryClicked: () -> Unit
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -67,7 +92,7 @@ fun FeedbackLayout(
 }
 
 @Composable
-fun BoxScope.LoadingLayout(message: TextValue) {
+private fun BoxScope.LoadingLayout(message: TextValue) {
     Surface(
         shape = AbsoluteRoundedCornerShape(36.dp),
         color = MaterialTheme.colors.primary,
@@ -96,7 +121,7 @@ fun BoxScope.LoadingLayout(message: TextValue) {
 }
 
 @Composable
-fun BoxScope.ErrorLayout(message: TextValue, onRetryClicked: () -> Unit) {
+private fun BoxScope.ErrorLayout(message: TextValue, onRetryClicked: () -> Unit) {
     Surface(
         shape = AbsoluteRoundedCornerShape(36.dp),
         color = MaterialTheme.colors.error,
@@ -132,7 +157,7 @@ fun BoxScope.ErrorLayout(message: TextValue, onRetryClicked: () -> Unit) {
 }
 
 @Composable
-fun BoxScope.EmptyLayout(message: TextValue, onRetryClicked: () -> Unit) {
+private fun BoxScope.EmptyLayout(message: TextValue, onRetryClicked: () -> Unit) {
     Surface(
         shape = AbsoluteRoundedCornerShape(36.dp),
         color = MaterialTheme.colors.secondary,
