@@ -16,3 +16,5 @@ fun TextValue.asString(): String =
         is RawString -> this.value
         is ResString -> stringResource(id = this.resourceId)
     }
+
+fun String.asTextValue(): TextValue = RawString(this)
