@@ -70,7 +70,9 @@ private fun FeedbackLayoutInternal(
             .fillMaxHeight()
     ) {
 
-        content()
+        if (state.showContent) {
+            content()
+        }
 
         if (state.transparentLayer) {
             Surface(
@@ -191,18 +193,26 @@ private fun BoxScope.EmptyLayout(message: TextValue, onRetryClicked: () -> Unit)
 
 
 sealed class FeedbackLayoutState(
-    val transparentLayer: Boolean = false
+    val transparentLayer: Boolean = false,
+    val showContent: Boolean = true,
 ) {
     data class Loading(
         val message: TextValue = ResString(R.string.label_loading),
         val showTransparentLayer: Boolean = false,
-    ) : FeedbackLayoutState(transparentLayer = showTransparentLayer)
+        val shouldShowContent: Boolean = false,
+    ) : FeedbackLayoutState(transparentLayer = showTransparentLayer, showContent = shouldShowContent)
 
-    data class Error(val message: TextValue = ResString(R.string.label_error)) : FeedbackLayoutState()
+    data class Error(
+        val message: TextValue = ResString(R.string.label_error),
+        val shouldShowContent: Boolean = false,
+    ) : FeedbackLayoutState(showContent = shouldShowContent)
 
-    data class Empty(val message: TextValue = ResString(R.string.label_empty)) : FeedbackLayoutState()
+    data class Empty(
+        val message: TextValue = ResString(R.string.label_empty),
+        val shouldShowContent: Boolean = false,
+    ) : FeedbackLayoutState(showContent = shouldShowContent)
 
-    object Success : FeedbackLayoutState()
+    object Success : FeedbackLayoutState(showContent = true)
 }
 
 @Preview(showBackground = true)

@@ -12,7 +12,7 @@ class InterestsViewModel(
     private val getUserInterestsUseCase: GetUserInterestsUseCase
 ) : ViewModel() {
 
-    val stateFlow = MutableStateFlow(InterestsScreenState.Initial)
+    val stateFlow = MutableStateFlow(InterestsScreenState())
 
     init {
         viewModelScope.launch {
@@ -58,13 +58,10 @@ class InterestsViewModel(
 }
 
 data class InterestsScreenState(
-    val isLoading: Boolean = false,
+    val isLoading: Boolean = true,
     val error: Throwable? = null,
     val interests: List<Interest> = emptyList()
 ) {
-    companion object {
-        val Initial = InterestsScreenState(
-            isLoading = true
-        )
-    }
+
+    val noInterestsLoaded: Boolean = !isLoading && error != null && interests.isEmpty()
 }

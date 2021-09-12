@@ -15,8 +15,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.danieldisu.hnnotify.common.ErrorView
-import com.danieldisu.hnnotify.common.LoadingView
+import com.danieldisu.hnnotify.common.feedback.FeedbackLayout
 import com.danieldisu.hnnotify.data.interests.Interest
 import com.danieldisu.hnnotify.navigation.NavigationRoute
 import com.danieldisu.hnnotify.navigation.navigate
@@ -38,18 +37,21 @@ fun InterestsScreen(
 }
 
 @Composable
-fun InterestScaffold(
+private fun InterestScaffold(
     value: InterestsScreenState,
     onInterestClicked: (interestId: String) -> Unit,
-) =
-    when {
-        value.isLoading -> LoadingView()
-        value.error != null -> ErrorView(value.error)
-        else -> InterestsLoaded(value.interests, onInterestClicked)
+) {
+    FeedbackLayout(
+        isError = value.error != null,
+        isEmpty = value.noInterestsLoaded,
+        isLoading = value.isLoading
+    ) {
+        InterestsLoaded(value.interests, onInterestClicked)
     }
+}
 
 @Composable
-fun InterestsLoaded(interests: List<Interest>, onInterestClicked: (interestId: String) -> Unit) =
+private fun InterestsLoaded(interests: List<Interest>, onInterestClicked: (interestId: String) -> Unit) =
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
@@ -62,7 +64,7 @@ fun InterestsLoaded(interests: List<Interest>, onInterestClicked: (interestId: S
     }
 
 @Composable
-fun KeywordInterestItemView(interest: Interest, onInterestClicked: (interestId: String) -> Unit) =
+private fun KeywordInterestItemView(interest: Interest, onInterestClicked: (interestId: String) -> Unit) =
     Surface(
         elevation = 2.dp,
         modifier = Modifier
