@@ -134,7 +134,7 @@ private fun KeywordTextInput(
     val focusRequester = remember { FocusRequester() }
 
     OutlinedTextField(
-        value = textState,
+        value = textState.copy(currentKeywordValue),
         label = { Text(stringResource(id = R.string.hint_add_interest_keyword)) },
         onValueChange = {
             updateTextState(it)
